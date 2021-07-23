@@ -31,6 +31,7 @@ body,html{
 }
 
 .app-image:hover{
+    opacity: 0.80;
     -moz-box-shadow: 0px 6px 5px #ccc;
     -webkit-box-shadow: 0px 6px 5px #ccc;
     box-shadow: 0px 6px 5px #ccc;
@@ -47,6 +48,10 @@ body,html{
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.login-logo:hover{
+    cursor: pointer;
 }
 
 .branding-logo{
