@@ -1,7 +1,6 @@
 <nav class="navbar navbar-light bg-light bg-nav">
     <a class="navbar-brand nav" href="#">
-        <img src="../../../assets/icon-invert.png" class="d-inline-block align-middle"
-            alt="">
+        <img src="../../../assets/icon-invert.png" class="d-inline-block align-middle" alt="">
         <span class="align-middle">
             Kiosko Turístico
         </span>
@@ -15,44 +14,27 @@
         Administrador
     </div>
     <ul class="sidebar-navigation">
-      <li class="header">Navigation</li>
-      <li>
-        <a href="#">
-          <i class="fa fa-home" aria-hidden="true"></i> Homepage
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard
-        </a>
-      </li>
-      <li class="header">Another Menu</li>
-      <li>
-        <a href="#">
-          <i class="fa fa-users" aria-hidden="true"></i> Friends
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <i class="fa fa-cog" aria-hidden="true"></i> Settings
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <i class="fa fa-info-circle" aria-hidden="true"></i> Information
-        </a>
-      </li>
+
+        <li class="header">
+            {{ sidebar.title }}
+        </li>
+        <li *ngFor="let option of sidebar.options; let i = index" (click)="current(i)">
+            <a [routerLink]="option.route" [ngClass]="{'selected' : i == selected }">
+                <i [class]="option.icon" aria-hidden="true"></i>
+                {{ option.title }}
+            </a>
+        </li>
     </ul>
-  </div>
-  
-  <div class="content-container">
-  
+</div>
+
+<div class="content-container">
+
     <div class="container-fluid">
         <router-outlet>
 
         </router-outlet>
-  
+
     </div>
-  </div>
+</div>
 
 <app-footer></app-footer>
