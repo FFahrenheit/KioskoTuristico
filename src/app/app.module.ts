@@ -9,12 +9,14 @@ import { AppRoutes } from './app.routing';
 import { InicioComponent } from './inicio/inicio.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { SharedModule } from './shared/shared.module';
+import { AdminComponent } from './layouts/admin/admin.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InicioComponent,
-    BlankComponent
+    BlankComponent,
+    AdminComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
