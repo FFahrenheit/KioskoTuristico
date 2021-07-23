@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+
+html, body{
+	font-family: 'Raleway', sans-serif;
+	color: rgb(90, 90, 90);
+	height: 100%;
+}
+
+.click :hover{
+	cursor: pointer;
+}
+
+.ok-icon-st{
+    color: green;
+}
+
+.warning-icon-st{
+    color: rgb(254,164,0);
+}
+
+.not-ok-icon-st{
+    color: red;
+}

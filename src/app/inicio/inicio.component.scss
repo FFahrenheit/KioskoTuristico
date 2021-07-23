@@ -1,0 +1,70 @@
+body,html{
+    height: 100% !important;
+}
+
+.login-background{
+    background-image: url("../../assets/img/background.jpg");
+    height: 100% !important; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.transparent{
+    opacity: 0.85;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.transparent:hover{
+    opacity: 1;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.app-image{
+    cursor: pointer;
+    margin-top: 10px;
+    height: 250px;
+    width: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.app-image:hover{
+    -moz-box-shadow: 0px 6px 5px #ccc;
+    -webkit-box-shadow: 0px 6px 5px #ccc;
+    box-shadow: 0px 6px 5px #ccc;
+    -moz-border-radius:190px;
+    -webkit-border-radius:190px;
+    border-radius:150px;
+    transition: box-shadow 0.3s, visibility 0.3s;
+}
+
+.login-logo{
+    margin-bottom: -10px;
+    width: 40%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.branding-logo{
+    margin: 0px;
+    width: 35%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.title{
+    font-family: 'Source Sans Pro', sans-serif;
+    color: rgb(60,60,60);
+    font-weight: bolder;
+}
+
+.app-title{
+    font-weight: bold;
+}
