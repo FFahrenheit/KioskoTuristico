@@ -14,16 +14,17 @@
         Administrador
     </div>
     <ul class="sidebar-navigation">
-
-        <li class="header">
-            {{ sidebar.title }}
-        </li>
-        <li *ngFor="let option of sidebar.options; let i = index" (click)="current(i)">
-            <a [routerLink]="option.route" [ngClass]="{'selected' : i == selected }">
-                <i [class]="option.icon" aria-hidden="true"></i>
-                {{ option.title }}
-            </a>
-        </li>
+        <div *ngFor="let options of sidebar; let i = index">
+            <li class="header">
+                {{ options.title }}
+            </li>
+            <li *ngFor="let option of options.options; let j = index" (click)="current(i,j)">
+                <a [routerLink]="option.route" [ngClass]="{'selected' : i.toString()+'-'+j.toString() == selected }">
+                    <i [class]="option.icon" aria-hidden="true"></i>
+                    {{ option.title }}
+                </a>
+            </li>
+        </div>
     </ul>
 </div>
 

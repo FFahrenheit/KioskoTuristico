@@ -9,19 +9,20 @@ import { sidebar } from 'src/app/resources/sidebar.options';
 export class AdminComponent implements OnInit {
 
   public sidebar = sidebar;
-  public selected : number = 0;
+  public selected : string = '0-0';
 
   constructor() { }
 
   ngOnInit(): void {
-    this.selected = Number(localStorage.getItem('index')) || 0;
+    this.selected = localStorage.getItem('index') || '0-0';
     console.log('Selected: ' + this.selected)
   }
 
-  public current(index : number){
+  public current(i : number, j : number){
+    let index = `${i}-${j}`;
     console.log(index);
     this.selected = index;
-    localStorage.setItem('index',index.toString());
+    localStorage.setItem('index',index);
   }
 
 }
