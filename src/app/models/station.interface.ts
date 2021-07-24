@@ -3,7 +3,7 @@ export interface Estacion{
     id_linea : number,
     id_estacion : number,
     estacion : string,
-    tipo : boolean,
-    estatus : boolean,
+    tipo : number,
+    estatus : number,
     id_matriz : number
 }

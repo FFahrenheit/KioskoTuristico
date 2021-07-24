@@ -20,7 +20,6 @@ export class AdminComponent implements OnInit {
 
   public current(i : number, j : number){
     let index = `${i}-${j}`;
-    console.log(index);
     this.selected = index;
     localStorage.setItem('index',index);
   }

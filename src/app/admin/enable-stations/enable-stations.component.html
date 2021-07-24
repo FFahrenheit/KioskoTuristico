@@ -1,1 +1,51 @@
-<p>enable-stations works!</p>
+<div class="table-responsive container text-center mb-5">
+    <h4> Habilitar y deshabilitar estaciones </h4>
+
+    <span class="text-left float-left mt-0 mb-1" *ngIf="stations.length!=0">
+        Haga click en el switch para habilitar o deshabilitar la estación
+    </span>
+
+    <span class="text-right float-right mt-0 mb-1">
+        Mostrando {{stations.length}} {{ stations.length == 1 ? 'resultado':'resultados'}}
+    </span>
+
+    <table class="table table-hover table-md" *ngIf="stations.length > 0">
+        <thead>
+            <tr class="header">
+                <th scope="col">ID</th>
+                <th scope="col">Línea</th>
+                <th scope="col">Estación</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">ID transbordo</th>
+                <th scope="col">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let e of stations; let i = index">
+                <td>
+                    {{ e.id_kiosco }}
+                </td>
+                <td>
+                    Línea {{ e.id_linea }}
+                </td>
+                <td>
+                    {{ e.estacion }}
+                </td>
+                <td>
+                    {{ tipo[e.tipo] }}
+                </td>
+                <td>
+                    {{ e.id_matriz || 'N/A' }}
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input"
+                            [id]="'customSwitch' + i" (change)="toggleStation($event,e.estacion)"
+                            [checked]=" e.estatus == 0">
+                        <label class="custom-control-label" [for]="'customSwitch'+i"> {{ estado[e.estatus] }} </label>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

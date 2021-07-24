@@ -12,11 +12,18 @@ import { sort } from 'src/app/structures/quicksort.algorithm';
 export class EnableStationsComponent implements OnInit {
 
   private estaciones = new Lista<Estacion>();
+  public filter = '';
+  public estado = ['Habilitada', 'Deshabilitada'];
+  public tipo = ['Normal', 'Transbordo'];
 
   constructor(private estacionesService: StationsService) { 
   }
 
   ngOnInit(): void {
+    this.loadStations();
+  }
+
+  public loadStations(){
     this.estacionesService.loadEstaciones().subscribe(resp => {
       if(resp){
         let estaciones = this.estacionesService.getEstaciones();
@@ -37,17 +44,25 @@ export class EnableStationsComponent implements OnInit {
         id_kiosco : e['id_kiosco'],
         id_linea : e['id_linea'],
         id_matriz : e['id_matriz'],
-        tipo : e['id_matriz']
+        tipo : e['tipo']
       }
       this.estaciones.pushBack(estacion);
     });
-
-    console.log(this.estaciones.toArray());
-
-    console.log(this.estaciones.map((f)=> f.id_linea == 1).toArray());
-
-    sort(this.estaciones,p => p.estacion);
-    console.log(this.estaciones.toArray());
+  }
+  
+  /***
+   * Se convierte a Array JSON para que Angular pueda manejarlo en el ngFor
+   * Sin embargo, la función map esta implementada con código
+   * puro y usando implementación propia 
+   * (ver declaración en structures/lista.structures.ts)
+   */
+  public get stations() : Estacion[]{
+    let estaciones = this.estaciones.map(e=> this.filter == '' || e.id_linea == Number(this.filter));
+    return estaciones.toArray();
   }
 
+  public toggleStation(event, estacion : string){
+    let state = event.currentTarget.checked ? 1 : 0;
+    console.log(estacion + ' => ' + state);
+  }
 }
