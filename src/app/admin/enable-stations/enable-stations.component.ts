@@ -15,12 +15,16 @@ export class EnableStationsComponent implements OnInit {
   public filter = '';
   public estado = ['Habilitada', 'Deshabilitada'];
   public tipo = ['Normal', 'Transbordo'];
+  public propiedad = 'estacion';
+  public lineas = Array.from(Array(7).keys());
 
-  constructor(private estacionesService: StationsService) { 
+  constructor(private estacionesService: StationsService,
+              ) { 
   }
 
   ngOnInit(): void {
     this.loadStations();
+    console.log(this.lineas)
   }
 
   public loadStations(){
@@ -48,6 +52,7 @@ export class EnableStationsComponent implements OnInit {
       }
       this.estaciones.pushBack(estacion);
     });
+    sort(this.estaciones, (e)=> e[this.propiedad]);
   }
   
   /***
@@ -58,6 +63,7 @@ export class EnableStationsComponent implements OnInit {
    */
   public get stations() : Estacion[]{
     let estaciones = this.estaciones.map(e=> this.filter == '' || e.id_linea == Number(this.filter));
+    sort(estaciones, e=>e[this.propiedad]);
     return estaciones.toArray();
   }
 

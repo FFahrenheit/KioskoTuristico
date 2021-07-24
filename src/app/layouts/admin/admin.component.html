@@ -1,41 +1,45 @@
-<nav class="navbar navbar-light bg-light bg-nav">
-    <a class="navbar-brand nav" href="#">
-        <img src="../../../assets/icon-invert.png" class="d-inline-block align-middle" alt="">
-        <span class="align-middle">
-            Kiosko Turístico
-        </span>
-    </a>
-    <div class="gdl-icon">
-        <img src="../../../assets/img/guadalajara.png">
-    </div>
-</nav>
-<div class="sidebar-container">
-    <div class="sidebar-logo">
-        Administrador
-    </div>
-    <ul class="sidebar-navigation">
-        <div *ngFor="let options of sidebar; let i = index">
-            <li class="header">
-                {{ options.title }}
-            </li>
-            <li *ngFor="let option of options.options; let j = index" (click)="current(i,j)">
-                <a [routerLink]="option.route" [ngClass]="{'selected' : i.toString()+'-'+j.toString() == selected }">
-                    <i [class]="option.icon" aria-hidden="true"></i>
-                    {{ option.title }}
-                </a>
-            </li>
+<div class="stick">
+    <nav class="navbar navbar-light bg-light bg-nav">
+        <a class="navbar-brand nav" href="#">
+            <img src="../../../assets/icon-invert.png" class="d-inline-block align-middle" alt="">
+            <span class="align-middle">
+                Kiosko Turístico
+            </span>
+        </a>
+        <div class="gdl-icon">
+            <img src="../../../assets/img/guadalajara.png">
         </div>
-    </ul>
+    </nav>
 </div>
-
-<div class="content-container">
-
-    <div class="container-fluid">
-        <router-outlet>
-
-        </router-outlet>
-
+<div style="margin-top: 85px;">
+    <div class="sidebar-container">
+        <div class="sidebar-logo">
+            Administrador
+        </div>
+        <ul class="sidebar-navigation">
+            <div *ngFor="let options of sidebar; let i = index">
+                <li class="header">
+                    {{ options.title }}
+                </li>
+                <li *ngFor="let option of options.options; let j = index" (click)="current(i,j)">
+                    <a [routerLink]="option.route" [ngClass]="{'selected' : i.toString()+'-'+j.toString() == selected }">
+                        <i [class]="option.icon" aria-hidden="true"></i>
+                        {{ option.title }}
+                    </a>
+                </li>
+            </div>
+        </ul>
     </div>
+    
+    <div class="content-container">
+    
+        <div class="container-fluid">
+            <router-outlet>
+    
+            </router-outlet>
+    
+        </div>
+    </div>
+    
+    <app-footer></app-footer>
 </div>
-
-<app-footer></app-footer>

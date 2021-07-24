@@ -110,6 +110,18 @@
     padding-left: 220px;
 }
 
-.selected{
+.selected {
     background-color: rgb(255, 198, 223) !important;
+}
+
+.stick {
+    // position: fixed;
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
+    // position: -webkit-sticky !important; /* Safari & IE */
+    // position: sticky !important;
+    top: 0 !important;
+    opacity: 0.95;
+    z-index: 10;
 }

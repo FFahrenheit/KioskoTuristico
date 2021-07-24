@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EnableStationsComponent } from './enable-stations/enable-stations.component';
 import { RouterModule } from '@angular/router';
 import { AdminRoutes } from './admin.routing';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { AdminRoutes } from './admin.routing';
   ],
   imports: [
     RouterModule.forChild(AdminRoutes),
-    CommonModule
+    CommonModule,
+    FormsModule,
   ]
 })
 export class AdminModule { }

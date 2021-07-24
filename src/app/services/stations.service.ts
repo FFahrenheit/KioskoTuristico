@@ -41,4 +41,24 @@ export class StationsService {
   public getEstaciones() : any{
     return this.estaciones;
   }
+
+  public toggleStation(station : string, state : number){
+    let form = {
+      station,
+      state
+    };
+    return this.http.put(`${ base_url }/estacion`, form)
+               .pipe(
+                 map(resp=>{
+                   if(resp['ok']){
+                     return true;
+                   }
+                   this.messageError = 'No se pudo cambiar el estado de la estación';
+                   return false;
+                 }),catchError(error=>{
+                   this.messageError = 'Error de servidor';
+                   return of(false);
+                 })
+               );
+  }
 }

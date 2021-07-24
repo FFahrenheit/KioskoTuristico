@@ -1,10 +1,14 @@
-import { compileClassMetadata } from "@angular/compiler";
 import { Routes } from "@angular/router";
 import { InicioComponent } from "./inicio/inicio.component";
 import { AdminComponent } from "./layouts/admin/admin.component";
 import { BlankComponent } from "./layouts/blank/blank.component";
 
 export const AppRoutes: Routes = [
+    {
+        path: '',
+        pathMatch: 'full',
+        component: InicioComponent
+    },
     {
         path: '',
         component: AdminComponent,
@@ -38,6 +42,6 @@ export const AppRoutes: Routes = [
     },
     {
         path: '**',
-        component: InicioComponent
+        redirectTo: 'inicio'
     }
 ]
