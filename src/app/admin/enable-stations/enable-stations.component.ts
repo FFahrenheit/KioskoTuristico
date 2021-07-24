@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Estacion } from 'src/app/models/station.interface';
 import { StationsService } from 'src/app/services/stations.service';
 import { Lista } from 'src/app/structures/lista.structure';
@@ -19,6 +20,7 @@ export class EnableStationsComponent implements OnInit {
   public lineas = Array.from(Array(7).keys());
 
   constructor(private estacionesService: StationsService,
+              private toastr: ToastrService
               ) { 
   }
 
@@ -67,8 +69,22 @@ export class EnableStationsComponent implements OnInit {
     return estaciones.toArray();
   }
 
-  public toggleStation(event, estacion : string){
-    let state = event.currentTarget.checked ? 1 : 0;
+  public toggleStation(event, estacion : string, est : Estacion){
+    let state = event.currentTarget.checked ? 0 : 1;
+    est.estatus = state;
     console.log(estacion + ' => ' + state);
+    this.estacionesService.toggleStation(estacion,state)
+        .subscribe(resp=>{
+          if(resp){
+            let estado = state == 1 ? 'inhabilitada' : 'habilitada';
+            let title = state == 1 ? 'Inhabilitación' : 'Habilitación'; 
+            this.toastr.success(`La estación ${ estacion } fue ${ estado } con éxito`,`${title} con éxito`);
+            
+          }else{
+            this.toastr.error(this.estacionesService.getError(),'Error');
+          }
+        },error=>{
+          this.toastr.error(this.estacionesService.getError(),'Error');
+        });
   }
 }

@@ -76,7 +76,7 @@
                 <td>
                     <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input toggle"
-                            [id]="'customSwitch' + i" (change)="toggleStation($event,e.estacion)"
+                            [id]="'customSwitch' + i" (change)="toggleStation($event,e.estacion, e)"
                             [checked]=" e.estatus == 0">
                         <label class="custom-control-label toggle" [for]="'customSwitch'+i"> {{ estado[e.estatus] }} </label>
                     </div>

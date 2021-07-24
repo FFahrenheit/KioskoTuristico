@@ -10,6 +10,9 @@ import { InicioComponent } from './inicio/inicio.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { SharedModule } from './shared/shared.module';
 import { AdminComponent } from './layouts/admin/admin.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,12 @@ import { AdminComponent } from './layouts/admin/admin.component';
     FormsModule,
     SharedModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3500,
+      progressBar: true,
+      progressAnimation: 'increasing'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
