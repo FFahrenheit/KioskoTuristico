@@ -10,7 +10,7 @@ export const sidebar = [
             {
                 title: 'Editar estaciones',
                 icon: 'fas fa-thumbtack',
-                route: ['administrador', 'habilitar']
+                route: ['administrador', 'estaciones', 'editar']
             },
         ]
     },

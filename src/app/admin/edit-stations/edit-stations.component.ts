@@ -6,11 +6,11 @@ import { Lista } from 'src/app/structures/lista.structure';
 import { sort } from 'src/app/structures/quicksort.algorithm';
 
 @Component({
-  selector: 'app-enable-stations',
-  templateUrl: './enable-stations.component.html',
-  styleUrls: ['./enable-stations.component.scss']
+  selector: 'app-edit-stations',
+  templateUrl: './edit-stations.component.html',
+  styleUrls: ['./edit-stations.component.scss']
 })
-export class EnableStationsComponent implements OnInit {
+export class EditStationsComponent implements OnInit {
 
   private estaciones = new Lista<Estacion>();
   public filter = '';
@@ -20,8 +20,7 @@ export class EnableStationsComponent implements OnInit {
   public lineas = Array.from(Array(7).keys());
 
   constructor(private estacionesService: StationsService,
-              private toastr: ToastrService
-              ) { 
+              private toastr: ToastrService) { 
   }
 
   ngOnInit(): void {
@@ -86,5 +85,6 @@ export class EnableStationsComponent implements OnInit {
         },error=>{
           this.toastr.error(this.estacionesService.getError(),'Error');
         });
-  }
+      }
+
 }

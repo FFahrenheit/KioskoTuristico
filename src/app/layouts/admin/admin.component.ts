@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { sidebar } from 'src/app/resources/sidebar.options';
 
 @Component({
@@ -11,11 +12,14 @@ export class AdminComponent implements OnInit {
   public sidebar = sidebar;
   public selected : string = '0-0';
 
-  constructor() { }
+  constructor(private router : Router) { }
 
   ngOnInit(): void {
     this.selected = localStorage.getItem('index') || '0-0';
-    console.log('Selected: ' + this.selected)
+    console.log('Selected: ' + this.selected);
+    let indexes = this.selected.split('-');
+    let route = this.sidebar[indexes[0]].options[indexes[1]].route;
+    this.router.navigate(route);
   }
 
   public current(i : number, j : number){

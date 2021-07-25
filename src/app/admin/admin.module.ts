@@ -4,10 +4,12 @@ import { EnableStationsComponent } from './enable-stations/enable-stations.compo
 import { RouterModule } from '@angular/router';
 import { AdminRoutes } from './admin.routing';
 import { FormsModule } from '@angular/forms';
+import { EditStationsComponent } from './edit-stations/edit-stations.component';
 
 @NgModule({
   declarations: [
-    EnableStationsComponent
+    EnableStationsComponent,
+    EditStationsComponent
   ],
   imports: [
     RouterModule.forChild(AdminRoutes),
