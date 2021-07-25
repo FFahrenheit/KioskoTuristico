@@ -20,7 +20,7 @@ export const sidebar = [
             {
                 title: 'Editar punto de interés',
                 icon: 'fas fa-place-of-worship',
-                route: ['administrador','habilitar']
+                route: ['administrador','puntos', 'editar']
             }
         ]
     }

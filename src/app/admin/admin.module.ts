@@ -6,11 +6,13 @@ import { AdminRoutes } from './admin.routing';
 import { FormsModule } from '@angular/forms';
 import { EditStationsComponent } from './edit-stations/edit-stations.component';
 import { SharedModule } from '../shared/shared.module';
+import { EditPlacesComponent } from './edit-places/edit-places.component';
 
 @NgModule({
   declarations: [
     EnableStationsComponent,
-    EditStationsComponent
+    EditStationsComponent,
+    EditPlacesComponent
   ],
   imports: [
     RouterModule.forChild(AdminRoutes),

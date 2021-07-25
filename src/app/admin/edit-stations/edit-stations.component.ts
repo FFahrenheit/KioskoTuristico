@@ -34,9 +34,10 @@ export class EditStationsComponent implements OnInit {
       if(resp){
         let estaciones = this.estacionesService.getEstaciones();
         this.makeStationList(estaciones);
+        this.toastr.error(this.estacionesService.getError(),'Error');
       }
     }, error => {
-      console.log(error);
+      this.toastr.error(this.estacionesService.getError(),'Error');
     });
   }
 
