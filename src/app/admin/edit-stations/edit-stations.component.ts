@@ -18,6 +18,7 @@ export class EditStationsComponent implements OnInit {
   public tipo = ['Normal', 'Transbordo'];
   public propiedad = 'estacion';
   public lineas = Array.from(Array(7).keys());
+  private currentStation : Estacion;
 
   constructor(private estacionesService: StationsService,
               private toastr: ToastrService) { 
@@ -68,23 +69,24 @@ export class EditStationsComponent implements OnInit {
     return estaciones.toArray();
   }
 
-  public toggleStation(event, estacion : string, est : Estacion){
-    event.preventDefault();
-    let state = event.currentTarget.checked ? 0 : 1;
-    console.log(estacion + ' => ' + state);
-    this.estacionesService.toggleStation(estacion,state)
-        .subscribe(resp=>{
-          if(resp){
-            let estado = state == 1 ? 'inhabilitada' : 'habilitada';
-            let title = state == 1 ? 'Inhabilitación' : 'Habilitación';
-            this.toastr.success(`La estación ${ estacion } fue ${ estado } con éxito`,`${title} con éxito`);
-            est.estatus = state;                        
-          }else{
-            this.toastr.error(this.estacionesService.getError(),'Error');
-          }
-        },error=>{
-          this.toastr.error(this.estacionesService.getError(),'Error');
-        });
+  public editStation(estacion : Estacion){
+    this.currentStation = estacion;
+  }
+
+  public changeName(newName : string){
+    newName = newName.trim();
+    let currentName = this.currentStation.estacion;
+    this.estacionesService.changeStation(currentName, newName)
+    .subscribe(resp=>{
+      if(resp){
+        this.toastr.success(`Estación ${ currentName } renombrada a ${ newName } con éxito`,`Cambio con éxito`);
+        this.currentStation.estacion = newName;
+      }else{
+        this.toastr.error(this.estacionesService.getError(),'Error');
       }
+    },error=>{
+      this.toastr.error(this.estacionesService.getError(),'Error');
+    });
+  }
 
 }

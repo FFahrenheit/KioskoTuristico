@@ -1,5 +1,8 @@
 <div class="table-responsive container text-center mb-5">
-    <h4> Editar estaciones </h4>
+    <h4> 
+        <i class="fas fa-bus"></i>
+        Editar estaciones
+     </h4>
 
     <div class="row my-3">
         <label for="" class="col-md-3 col-form-label">Filtrar por línea:</label>
@@ -79,7 +82,12 @@
                     {{ estado[e.estatus] }}
                 </td>
                 <td>
-                    <edit-modal></edit-modal>
+                    <edit-modal (click)="editStation(e)"
+                    (send)="changeName($event)"
+                    [title]="'Editar estación ' + e.estacion"
+                    placeholder="Nuevo nombre de la estación">
+
+                    </edit-modal>
                 </td>
             </tr>
         </tbody>

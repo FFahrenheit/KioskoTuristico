@@ -40,7 +40,7 @@ export class EditModalComponent implements OnInit {
       this.modalReference.result.then(result => {
         switch (result) {
           case 'YES':
-            this.send.emit(this.form.controls['estado'].value);
+            this.send.emit(this.form.controls['name'].value);
             break;
           case 'NO':
             this.reject.emit();
@@ -60,8 +60,9 @@ export class EditModalComponent implements OnInit {
       this.form.markAllAsTouched();
     }else{
       this.modalReference.close();
-      let comment : string = this.form.controls['estado'].value;
+      let comment : string = this.form.controls['name'].value;
       this.send.emit(comment);
+      this.form.reset();
     }
   }
 
