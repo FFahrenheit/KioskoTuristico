@@ -82,7 +82,11 @@ export class EditStationsComponent implements OnInit {
     .subscribe(resp=>{
       if(resp){
         this.toastr.success(`Estación ${ currentName } renombrada a ${ newName } con éxito`,`Cambio con éxito`);
-        this.currentStation.estacion = newName;
+        this.estaciones.map(e => {
+          return e.estacion == currentName
+        }).forEach(e => {
+          e.estacion = newName;
+        });
       }else{
         this.toastr.error(this.estacionesService.getError(),'Error');
       }

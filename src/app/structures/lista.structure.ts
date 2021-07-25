@@ -1,3 +1,7 @@
+interface For<T>{
+    (item : T) : void
+}
+
 interface Map<T>{
     (item : T) : boolean
 }
@@ -224,6 +228,12 @@ export class Lista<T>{
             }
         }
         return list;
+    }
+
+    public forEach(callback : For<T>) : void {
+        for(let i = 0; i < this.size(); i++){
+            callback(this.get(i));
+        }
     }
 
 }

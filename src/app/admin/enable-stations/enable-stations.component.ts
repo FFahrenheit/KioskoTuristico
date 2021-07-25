@@ -81,7 +81,11 @@ export class EnableStationsComponent implements OnInit {
             let estado = state == 1 ? 'inhabilitada' : 'habilitada';
             let title = state == 1 ? 'Inhabilitación' : 'Habilitación';
             this.toastr.success(`La estación ${ estacion } fue ${ estado } con éxito`,`${title} con éxito`);
-            est.estatus = state;                        
+            this.estaciones.map(e => {
+              return e.estacion == estacion;
+            }).forEach(e=>{
+              e.estatus = state;
+            });
           }else{
             this.toastr.error(this.estacionesService.getError(),'Error');
           }

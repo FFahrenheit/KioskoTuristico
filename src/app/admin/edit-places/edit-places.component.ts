@@ -67,7 +67,23 @@ export class EditPlacesComponent implements OnInit {
   }
 
   public changeName(newName : string){
-    return 0;
+    newName = newName.trim();
+    let currentName = this.currentPoint.punto_de_interes;
+    this.puntosService.editPlace(currentName,newName)
+        .subscribe(resp=>{
+          if(resp){
+            this.toastr.success(`Puntos de interés ${ currentName } renombrado a ${ newName }`,'Cambio con éxito');
+            this.puntos.map(p => {
+                return p.punto_de_interes == currentName}
+              ).forEach(p=>{
+                p.punto_de_interes = newName;
+              });
+          }else{
+            this.toastr.error(this.puntosService.getError());
+          }
+        },error=>{
+          this.toastr.error(this.puntosService.getError());
+        })
   }
 
 }

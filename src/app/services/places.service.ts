@@ -34,6 +34,27 @@ export class PlacesService {
     );
   }
 
+  public editPlace(currentName : string, newName : string){
+    const form = {
+      currentName,
+      newName
+    };
+
+    return this.http.put(`${base_url}/puntos`,form)
+              .pipe(
+                map(resp=>{
+                  if(resp['ok']){
+                    return true;
+                  }
+                  this.errorMessage = resp['error'] || 'No se pudo cambiar el nombre del punto de interés';
+                  return false;
+                }),catchError(error=>{
+                  this.errorMessage = 'Error de servidor';
+                  return of(false);
+                })
+              );
+  }
+
   public getPlaces(){
     return this.places;
   }
