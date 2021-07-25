@@ -13,7 +13,7 @@ import { sort } from 'src/app/structures/quicksort.algorithm';
 export class EditStationsComponent implements OnInit {
 
   private estaciones = new Lista<Estacion>();
-  public filter = '';
+  public filter = '1';
   public estado = ['Habilitada', 'Deshabilitada'];
   public tipo = ['Normal', 'Transbordo'];
   public propiedad = 'estacion';
@@ -34,6 +34,7 @@ export class EditStationsComponent implements OnInit {
       if(resp){
         let estaciones = this.estacionesService.getEstaciones();
         this.makeStationList(estaciones);
+      }else{
         this.toastr.error(this.estacionesService.getError(),'Error');
       }
     }, error => {

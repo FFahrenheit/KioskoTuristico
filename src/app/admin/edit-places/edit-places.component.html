@@ -1,1 +1,82 @@
-<p>edit-places works!</p>
+<div class="table-responsive container text-center mb-5">
+    <h4>
+        <i class="fas fa-archway"></i>
+        Editar puntos de interés
+    </h4>
+
+    <div class="row my-3">
+        <label for="" class="col-md-3 col-form-label">Filtrar por línea:</label>
+        <div class="col-md-4">
+            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect" [(ngModel)]="filter">
+                <option value="">Todas las líneas</option>
+                <option *ngFor="let l of lineas" [value]="l + 1">
+                    Línea {{ l + 1 }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <span class="text-left float-left mt-0 mb-1" *ngIf="points.length!=0">
+        Haga click en el botón de edición para editar los detalles del punto de interés
+    </span>
+
+    <span class="text-right float-right mt-0 mb-1">
+        Mostrando {{points.length}} resultados
+    </span>
+
+    <table class="table table-hover table-md mb-5" *ngIf="points.length > 0">
+        <thead>
+            <tr class="header">
+                <th scope="col" class="align-middle" (click)="propiedad = 'id_puntos'">
+                    <i class="fas fa-sort float-left"></i>
+                    ID
+                </th>
+                <th scope="col" class="align-middle" (click)="propiedad = 'id_linea'">
+                    <i class="fas fa-sort float-left"></i>
+                    Línea
+                </th>
+                <th scope="col" class="align-middle" (click)="propiedad = 'id_kiosco'">
+                    <i class="fas fa-sort float-left"></i>
+                    ID estación
+                </th>
+                <th scope="col" class="align-middle" (click)="propiedad = 'estacion'">
+                    <i class="fas fa-sort float-left"></i>
+                    Estación
+                </th>
+                <th scope="col" class="align-middle" (click)="propiedad = 'punto_de_interes'">
+                    <i class="fas fa-sort float-left"></i>
+                    Punto de interés
+                </th>
+                <th scope="col" class="align-middle">
+                    Editar
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of points; let i = index">
+                <td>
+                    {{ p.id_puntos }}
+                </td>
+                <td>
+                    Línea {{ p.id_linea }}
+                </td>
+                <td>
+                    {{ p.id_kiosco }}
+                </td>
+                <td>
+                    {{ p.estacion }}
+                </td>
+                <td>
+                    {{ p.punto_de_interes }}
+                </td>
+                <td>
+                    <edit-modal (click)="editPoint(p)" (send)="changeName($event)"
+                        [title]="'Editar ' + p.punto_de_interes" placeholder="Nuevo nombre del punto de interés"
+                        content="Por favor, ingrese los nuevos detalles del punto de interés">
+
+                    </edit-modal>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

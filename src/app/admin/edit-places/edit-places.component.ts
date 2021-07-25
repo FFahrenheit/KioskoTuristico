@@ -13,7 +13,7 @@ import { sort } from 'src/app/structures/quicksort.algorithm';
 export class EditPlacesComponent implements OnInit {
 
   private puntos = new Lista<PuntoInteres>();
-  public filter = ''; //Filtro de línea
+  public filter = '1'; //Filtro de línea
   public propiedad = 'punto_de_interes'; //Ordenar por nombre
   public lineas = Array.from(Array(7).keys()); //Lineas
   private currentPoint : PuntoInteres;
@@ -54,6 +54,20 @@ export class EditPlacesComponent implements OnInit {
       this.puntos.pushBack(punto);
     });
     sort(this.puntos, (p)=>p.punto_de_interes);
+  }
+
+  public get points() : PuntoInteres[]{
+    let puntos = this.puntos.map((p) => this.filter == '' || p.id_linea == Number(this.filter));
+    sort(puntos, p => p[this.propiedad]);
+    return puntos.toArray();
+  }
+
+  public editPoint(punto : PuntoInteres) : void{
+    this.currentPoint = punto;
+  }
+
+  public changeName(newName : string){
+    return 0;
   }
 
 }
