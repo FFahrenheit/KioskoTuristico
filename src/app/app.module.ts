@@ -13,6 +13,7 @@ import { AdminComponent } from './layouts/admin/admin.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ToastrModule } from 'ngx-toastr';
     RouterModule.forRoot(AppRoutes),
     BrowserModule,
     FormsModule,
+    NgbModule,
     SharedModule,
     HttpClientModule,
     BrowserAnimationsModule,
@@ -32,7 +34,7 @@ import { ToastrModule } from 'ngx-toastr';
       timeOut: 3500,
       progressBar: true,
       progressAnimation: 'increasing'
-    })
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

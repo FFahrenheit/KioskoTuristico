@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { AdminRoutes } from './admin.routing';
 import { FormsModule } from '@angular/forms';
 import { EditStationsComponent } from './edit-stations/edit-stations.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { EditStationsComponent } from './edit-stations/edit-stations.component';
     RouterModule.forChild(AdminRoutes),
     CommonModule,
     FormsModule,
+    SharedModule
   ]
 })
 export class AdminModule { }
