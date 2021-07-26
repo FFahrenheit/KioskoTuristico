@@ -4,6 +4,7 @@ import { InicioComponent } from "./inicio/inicio.component";
 import { AdminComponent } from "./layouts/admin/admin.component";
 import { BlankComponent } from "./layouts/blank/blank.component";
 import { MainAppComponent } from "./layouts/main-app/main-app.component";
+import { MainComponent } from "./main/main.component";
 
 export const AppRoutes: Routes = [
     {
@@ -30,7 +31,7 @@ export const AppRoutes: Routes = [
         children:[
             {
                 path: 'app',
-                component: EditStationsComponent,
+                component: MainComponent,
                 data: {
                     title: 'Kiosko turístico GDL'
                 }

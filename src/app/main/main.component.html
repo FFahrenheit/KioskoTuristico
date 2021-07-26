@@ -1,0 +1,62 @@
+<div class="containter">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card m-3 special-card">
+                <div class="card-body">
+                    <h4 class="text-center">¡Descubra la forma más rápida de llegar a su destino mientras explora la
+                        ciudad!</h4>
+                    <form [formGroup]="form">
+                        <div class="form-group">
+                            <label for="origen">
+                                <i class="fas fa-map-marker-alt"
+                                    [ngClass]="{'text-primary' : get('origen').valid, 'text-secondary' : get('origen').invalid}"></i>
+                                Origen
+                            </label>
+                            <select class="form-control custom-select" formControlName="origen"
+                                [class]="getClass('origen')">
+                                <option selected disabled value="">
+                                    Seleccione la estación o PI de origen
+                                </option>
+                                <option *ngFor="let s of stops">
+                                    {{ s.nombre }}
+                                    ({{ s.tipo == 0 ? 'Estación' : 'Punto de interés' }})
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="destino">
+                                <i class="fas fa-map-marker-alt"
+                                    [ngClass]="{'text-danger' : get('destino').valid, 'text-secondary' : get('destino').invalid}"></i>
+                                Destino
+                            </label>
+                            <select class="form-control custom-select" formControlName="destino"
+                                [class]="getClass('destino')">
+                                <option selected disabled value="">
+                                    Seleccione la estación o PI de destino
+                                </option>
+                                <option *ngFor="let s of stops">
+                                    {{ s.nombre }}
+                                    ({{ s.tipo == 0 ? 'Estación' : 'Punto de interés' }})
+                                </option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn" (click)="submit()"
+                                [ngClass]="{'btn-success' : form.valid , 'btn-secondary disabled' : !form.valid }">
+                                Calcular ruta
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card m-3" *ngIf="submitted">
+                <div class="card-body">
+                    Ola
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

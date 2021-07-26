@@ -1,3 +1,14 @@
+.app-background {
+    background-image: url("../../../assets/img/route.jpg");
+    height: calc(100% - 85px) !important;
+    height: -o-calc(100% - 85px) !important; /* opera */
+    height: -webkit-calc(100% - 85px) !important; /* google, safari */
+    height: -moz-calc(100% - 85px) !important; /* firefox */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .nav img {
     height: 60px;
     width: auto;
@@ -40,7 +51,6 @@
     padding-top: 20px;
 }
 
-
 .content-container {
     padding-left: 220px;
 }
@@ -51,11 +61,11 @@
 
 .stick {
     // position: fixed;
-    overflow: hidden;
-    width: 100%;
-    position: fixed;
-    // position: -webkit-sticky !important; /* Safari & IE */
-    // position: sticky !important;
+    // overflow: hidden;
+    // width: 100%;
+    // position: fixed;
+    position: -webkit-sticky !important; /* Safari & IE */
+    position: sticky !important;
     top: 0 !important;
     opacity: 0.95;
     z-index: 10;

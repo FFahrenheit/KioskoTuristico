@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MainAppComponent } from './layouts/main-app/main-app.component';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MainAppComponent } from './layouts/main-app/main-app.component';
     InicioComponent,
     BlankComponent,
     AdminComponent,
-    MainAppComponent
+    MainAppComponent,
+    MainComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
@@ -30,6 +32,7 @@ import { MainAppComponent } from './layouts/main-app/main-app.component';
     FormsModule,
     NgbModule,
     SharedModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({

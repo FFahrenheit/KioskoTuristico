@@ -1,0 +1,19 @@
+.special-card{
+    border-radius: 25px;
+    opacity: 0.92;
+}
+
+.special-card:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+
+.form-group label{
+    font-size: 18px;
+    font-weight: 300;
+    color: black;
+}
+
+.disabled:hover{
+    cursor: default !important;
+}
