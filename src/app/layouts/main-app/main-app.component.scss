@@ -1,0 +1,62 @@
+.nav img {
+    height: 60px;
+    width: auto;
+}
+
+.nav span {
+    color: white;
+    vertical-align: center;
+    font-size: 30px;
+    font-weight: 200;
+    text-shadow: 1px 1px 1px gray;
+}
+
+.bg-nav {
+    background: rgb(234, 29, 115) !important;
+}
+
+.gdl-icon img {
+    height: 50px !important;
+    width: auto !important;
+}
+
+.gdl-icon {
+    display: inline !important;
+    text-align: right !important;
+}
+
+.sidebar-container {
+    position: fixed;
+    width: 220px;
+    height: 100%;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #ffffff;
+    color: #fff;
+}
+
+.content-container {
+    padding-top: 20px;
+}
+
+
+.content-container {
+    padding-left: 220px;
+}
+
+.selected {
+    background-color: rgb(255, 198, 223) !important;
+}
+
+.stick {
+    // position: fixed;
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
+    // position: -webkit-sticky !important; /* Safari & IE */
+    // position: sticky !important;
+    top: 0 !important;
+    opacity: 0.95;
+    z-index: 10;
+}

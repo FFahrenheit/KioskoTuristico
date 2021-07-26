@@ -26,7 +26,6 @@ export class EnableStationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStations();
-    console.log(this.lineas)
   }
 
   public loadStations(){

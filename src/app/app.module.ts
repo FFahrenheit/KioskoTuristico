@@ -14,13 +14,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MainAppComponent } from './layouts/main-app/main-app.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InicioComponent,
     BlankComponent,
-    AdminComponent
+    AdminComponent,
+    MainAppComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),

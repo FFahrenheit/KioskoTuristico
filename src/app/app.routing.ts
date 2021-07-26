@@ -1,7 +1,9 @@
 import { Routes } from "@angular/router";
+import { EditStationsComponent } from "./admin/edit-stations/edit-stations.component";
 import { InicioComponent } from "./inicio/inicio.component";
 import { AdminComponent } from "./layouts/admin/admin.component";
 import { BlankComponent } from "./layouts/blank/blank.component";
+import { MainAppComponent } from "./layouts/main-app/main-app.component";
 
 export const AppRoutes: Routes = [
     {
@@ -19,6 +21,19 @@ export const AppRoutes: Routes = [
                 import('./admin/admin.module').then(
                     (m) => m.AdminModule
                 )
+            }
+        ]
+    },
+    {
+        path: '',
+        component: MainAppComponent,
+        children:[
+            {
+                path: 'app',
+                component: EditStationsComponent,
+                data: {
+                    title: 'Kiosko turístico GDL'
+                }
             }
         ]
     },

@@ -26,7 +26,6 @@ export class EditStationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStations();
-    console.log(this.lineas)
   }
 
   public loadStations(){
@@ -57,6 +56,7 @@ export class EditStationsComponent implements OnInit {
       this.estaciones.pushBack(estacion);
     });
     sort(this.estaciones, (e)=> e[this.propiedad]);
+    console.log(this.estaciones.toArray())
   }
   
   /***

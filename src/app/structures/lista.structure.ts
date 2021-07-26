@@ -214,25 +214,31 @@ export class Lista<T>{
 
     public toArray() : T[]{
         let list :T[] = [];
-        for(let i=0; i<this.size(); i++){
-            list.push(this.get(i));
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            list.push(temp.data);
+            temp = temp.next;
         }
         return list;
     }
 
     public map(comparator : Map<T>) : Lista<T> {
         let list = new Lista<T>();
-        for(let i=0; i<this.size(); i++){
-            if(comparator(this.get(i))){
-                list.pushBack(this.get(i));
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            if(comparator(temp.data)){
+                list.pushBack(temp.data);
             }
+            temp = temp.next;
         }
         return list;
     }
 
     public forEach(callback : For<T>) : void {
-        for(let i = 0; i < this.size(); i++){
-            callback(this.get(i));
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            callback(temp.data);
+            temp = temp.next;
         }
     }
 

@@ -17,4 +17,8 @@ export class InicioComponent implements OnInit {
     this.router.navigate(['administrador']);
   }
 
+  public goToApp() : void{
+    this.router.navigate(['app']);
+  }
+
 }

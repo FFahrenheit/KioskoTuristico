@@ -23,7 +23,6 @@ export class EditPlacesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPoints();
-    console.log(this.puntos);
   }
 
   private loadPoints(){
