@@ -1,6 +1,6 @@
 .special-card{
     border-radius: 25px;
-    opacity: 0.92;
+    opacity: 0.91;
 }
 
 .special-card:hover{
@@ -16,4 +16,27 @@
 
 .disabled:hover{
     cursor: default !important;
+}
+
+.scroll {
+    border-radius: 25px;
+    height: calc(100vh - 170px) !important;
+    height: -o-calc(100vh - 170px) !important; /* opera */
+    height: -webkit-calc(100vh - 170px) !important; /* google, safari */
+    height: -moz-calc(100vh - 170px) !important; /* firefox */
+    overflow-y: auto;
+}
+
+.spin{
+    color: rgb(234, 29, 115) !important;
+    width: 50px;
+    height: 50px;
+}
+
+.loading{
+    font-style: italic;
+}
+
+.primary{
+    color: rgb(234, 29, 115) !important;
 }

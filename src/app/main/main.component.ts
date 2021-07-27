@@ -16,6 +16,7 @@ export class MainComponent implements OnInit {
   public form : FormGroup;
   private paradas = new Lista<Parada>();
   public submitted = false;
+  public loading : boolean = true;
 
   constructor(private fb : FormBuilder,
               private stopsService : RoutesService,
@@ -74,6 +75,10 @@ export class MainComponent implements OnInit {
     this.form.markAllAsTouched();
     if(this.form.valid){
       this.submitted = true;
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 1000);
     }
   }
 }

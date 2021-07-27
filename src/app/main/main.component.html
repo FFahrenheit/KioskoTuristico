@@ -1,4 +1,4 @@
-<div class="containter">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <div class="card m-3 special-card">
@@ -17,7 +17,7 @@
                                 <option selected disabled value="">
                                     Seleccione la estación o PI de origen
                                 </option>
-                                <option *ngFor="let s of stops">
+                                <option *ngFor="let s of stops" [value]="s.nombre">
                                     {{ s.nombre }}
                                     ({{ s.tipo == 0 ? 'Estación' : 'Punto de interés' }})
                                 </option>
@@ -34,7 +34,7 @@
                                 <option selected disabled value="">
                                     Seleccione la estación o PI de destino
                                 </option>
-                                <option *ngFor="let s of stops">
+                                <option *ngFor="let s of stops" [value]="s.nombre">
                                     {{ s.nombre }}
                                     ({{ s.tipo == 0 ? 'Estación' : 'Punto de interés' }})
                                 </option>
@@ -52,9 +52,27 @@
             </div>
         </div>
         <div class="col-md-8">
-            <div class="card m-3" *ngIf="submitted">
+            <div class="card m-3 scroll" *ngIf="submitted || true">
                 <div class="card-body">
-                    Ola
+                    <h2>
+                        <i class="fas fa-route" [ngClass]="{'text-secondary':loading, 'primary' : !loading}"></i>
+                        Ruta de {{ get('origen').value }} a {{ get('destino').value }}
+                    </h2>
+                    <div class="text-center align-center" *ngIf="loading; else route">
+                        <h4 class="loading">Cargando ruta ... </h4>
+                        <div class="spinner-grow text-primary spin" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <ng-template #route>
+                        <div class="selector">
+                            <ul>
+                                <li *ngFor="let s of stops">
+                                    Hey muy buenas a todos!    
+                                </li>
+                            </ul>
+                        </div>
+                    </ng-template>
                 </div>
             </div>
         </div>
