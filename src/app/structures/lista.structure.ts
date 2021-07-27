@@ -61,7 +61,7 @@ export class Lista<T>{
 
     public front() : T{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede front()';
         }
 
         return this.listFront.data;
@@ -69,7 +69,7 @@ export class Lista<T>{
 
     public back() : T{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede back()';
         }
 
         return this.listBack.data;
@@ -77,7 +77,7 @@ export class Lista<T>{
 
     public popFront() : void{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede popFront()';
         }
         if(this.size() == 1){
             this.listBack = null;
@@ -91,7 +91,7 @@ export class Lista<T>{
 
     public popBack() : void{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede popBack()';
         }
         if(this.size() == 1){
             this.listFront = null;
@@ -109,9 +109,9 @@ export class Lista<T>{
 
     public insert(position : number, obj : T) : void{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede insertar en ' + position;
         }else if(position > this.size()){
-            throw 'Posición inválida';
+            throw 'Posición inválida, no se puede insertar en ' + position;
         }else if(position == 0){
             this.pushFront(obj);
         }else if(position == this.size()){
@@ -129,9 +129,9 @@ export class Lista<T>{
 
     public erase(position : number) : void{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede borrar ' + position;
         }else if(position >= this.size()){
-            throw 'Posición inválida';
+            throw 'Posición inválida, no se puede borrar en ' + position;
         }else if(position == 0){
             this.popFront();
         }else if(position == this.size() - 1){
@@ -154,7 +154,7 @@ export class Lista<T>{
 
     public remove(obj : T) : void{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede remover el objeto';
         }else{
             let data : T;
             let i = 0;
@@ -174,9 +174,9 @@ export class Lista<T>{
 
     public get(position : number ) : T{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede obtener el objeto en ' + position;
         }else if(position >= this.size()){
-            throw 'Posición inválida';
+            throw 'Posición inválida, no se puede obtener el objeto en ' + position;
         }
 
         let temp : Nodo<T> = this.listFront;
@@ -188,9 +188,9 @@ export class Lista<T>{
 
     public set(position : number, obj : T) : void{
         if(this.empty()){
-            throw 'Lista vacía';
+            throw 'Lista vacía, no se puede setear en ' + position;
         }else if(position >= this.size()){
-            throw 'Posición inválida';
+            throw 'Posición inválida, no se puede setear en ' + position;
         }
 
         let temp : Nodo<T> = this.listFront;
@@ -202,9 +202,9 @@ export class Lista<T>{
 
     public swapAt(i : number, j : number){
         if(this.empty()){
-            throw 'Lista vacía';
+            throw `Lista vacía, no se puede swap en ${i}, ${j}`;
         }else if(i >= this.size() || j >= this.size()){
-            throw 'Posiciones inválidas';
+            throw `Posiciones inválidas, no se puede swap en ${i}, ${j}`;
         }
         let a  = this.get(i);
         let b = this.get(j);
@@ -240,6 +240,39 @@ export class Lista<T>{
             callback(temp.data);
             temp = temp.next;
         }
+    }
+
+    public includes(obj : T) : boolean{
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            if(temp.data == obj){
+                return true;
+            }
+            temp = temp.next;
+        }
+        return false;
+    }
+
+    public includesMap(comparator : Map<T>) : boolean{
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            if(comparator(temp.data)){
+                return true;
+            }
+            temp = temp.next;
+        }
+        return false;
+    }
+
+    public findMap(comparator : Map<T>) : T{
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            if(comparator(temp.data)){
+                return temp.data;
+            }
+            temp = temp.next;
+        }
+        return null;
     }
 
 }
