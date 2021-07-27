@@ -5,6 +5,7 @@ import { Parada } from '../models/stop.interface';
 import { RoutesService } from '../services/routes.service';
 import { Lista } from '../structures/lista.structure';
 import { sort } from '../structures/quicksort.algorithm';
+import { RouteCalculatorService } from '../structures/route-calculator.service';
 
 @Component({
   selector: 'app-main',
@@ -14,18 +15,24 @@ import { sort } from '../structures/quicksort.algorithm';
 export class MainComponent implements OnInit {
 
   public form : FormGroup;
-  private paradas = new Lista<Parada>();
   public submitted = false;
   public loading : boolean = true;
+  public origin : Parada;
+  public destination : Parada;
+  public originName : string;
+  public destinationName : string;
+
+  private paradas = new Lista<Parada>();
 
   constructor(private fb : FormBuilder,
               private stopsService : RoutesService,
-              private toastr : ToastrService) { }
+              private toastr : ToastrService,
+              private route : RouteCalculatorService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      origen: ['', Validators.required],
-      destino: ['', Validators.required]
+      origen: [null, Validators.required],
+      destino: [null, Validators.required]
     });
     this.loadStops();
   }
@@ -35,6 +42,8 @@ export class MainComponent implements OnInit {
         .subscribe(resp=>{
           if(resp){
             this.makeList(this.stopsService.getStops());
+            this.get('origen').setValue(null);
+            this.get('destino').setValue(null);
           }else{
             this.toastr.error(this.stopsService.getError(),'Error');
           }
@@ -61,7 +70,6 @@ export class MainComponent implements OnInit {
       this.paradas.pushBack(parada);
     });
     sort(this.paradas, (p) => p.nombre);
-    console.log(this.paradas.toArray());
   }
 
   public getClass(ctrl : string) : string{
@@ -76,6 +84,10 @@ export class MainComponent implements OnInit {
     if(this.form.valid){
       this.submitted = true;
       this.loading = true;
+      // console.log(this.get('origen').value);
+      this.originName = this.destination.nombre;
+      this.destinationName = this.origin.nombre;
+      this.route.loadRoute(this.origin as Parada, this.destination as Parada)
       setTimeout(() => {
         this.loading = false;
       }, 1000);

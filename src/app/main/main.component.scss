@@ -18,12 +18,15 @@
     cursor: default !important;
 }
 
-.scroll {
+.round{
     border-radius: 25px;
-    height: calc(100vh - 170px) !important;
-    height: -o-calc(100vh - 170px) !important; /* opera */
-    height: -webkit-calc(100vh - 170px) !important; /* google, safari */
-    height: -moz-calc(100vh - 170px) !important; /* firefox */
+}
+
+.scroll {
+    max-height: calc(100vh - 235px) !important;
+    max-height: -o-calc(100vh - 235px) !important; /* opera */
+    max-height: -webkit-calc(100vh - 235px) !important; /* google, safari */
+    max-height: -moz-calc(100vh - 235px) !important; /* firefox */
     overflow-y: auto;
 }
 
@@ -39,4 +42,5 @@
 
 .primary{
     color: rgb(234, 29, 115) !important;
+    transition: color 1s, visibility 1s;
 }
