@@ -5,6 +5,7 @@ interface For<T>{
 interface Map<T>{
     (item : T) : boolean
 }
+
 class Nodo<T>{
     public data : T = null;
     public next : Nodo<T> = null;
@@ -253,6 +254,17 @@ export class Lista<T>{
         return false;
     }
 
+    public findUnique(comparator : Map<T>) : T{
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            if(comparator(temp.data)){
+                return temp.data;
+            }
+            temp = temp.next;
+        }
+        return null;
+    }
+
     public includesMap(comparator : Map<T>) : boolean{
         let temp : Nodo<T> = this.listFront;
         while(temp){
@@ -273,6 +285,16 @@ export class Lista<T>{
             temp = temp.next;
         }
         return null;
+    }
+
+    public reverse() : Lista<T>{
+        let lista = new Lista<T>();
+        let temp : Nodo<T> = this.listFront;
+        while(temp){
+            lista.pushFront(temp.data);
+            temp = temp.next;
+        }
+        return lista;
     }
 
 }

@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { classicNameResolver } from 'typescript';
+import { Linea } from '../models/line.interface';
 import { PuntoInteres } from '../models/place.interface';
 import { Estacion } from '../models/station.interface';
 import { Parada } from '../models/stop.interface';
 import { PlacesService } from '../services/places.service';
+import { RoutesService } from '../services/routes.service';
 import { StationsService } from '../services/stations.service';
 import { Lista } from './lista.structure';
 import { sort } from './quicksort.algorithm';
+import { Ruta } from './ruta.class';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +19,8 @@ export class RouteCalculatorService {
 
     private estaciones = new Lista<Estacion>();
     private puntos = new Lista<PuntoInteres>();
+    private lineas = new Lista<Linea>();
+    private transbordos = new Lista<Estacion>();
 
     private posiblesOrigenes = new Lista<Estacion>();
     private posiblesDestinos = new Lista<Estacion>();
@@ -25,8 +29,10 @@ export class RouteCalculatorService {
     private matrizT: Lista<Lista<number>>;
 
     constructor(private estacionesService: StationsService,
-        private puntosService: PlacesService) {
+        private puntosService: PlacesService,
+        private rutasService: RoutesService) {
         let calls = [];
+
         calls.push(this.estacionesService.loadEstaciones()
             .pipe(map(resp => {
                 if (resp) {
@@ -43,9 +49,18 @@ export class RouteCalculatorService {
                 return true;
             })));
 
+        calls.push(this.rutasService.loadLines()
+            .pipe(map(resp => {
+                if (resp) {
+                    this.makeLinesList(this.rutasService.getLines());
+                }
+                return true;
+            })));
+
         forkJoin(calls).subscribe(resp => {
             console.log(this.estaciones);
             console.log(this.puntos);
+            console.log(this.lineas);
             this.calculateMatrix();
         });
     }
@@ -79,6 +94,18 @@ export class RouteCalculatorService {
         });
     }
 
+    private makeLinesList(lineas : any[]){
+        this.lineas.clear();
+        lineas.forEach(l =>{
+            const linea: Linea = {
+                id_linea: l['id_linea'],
+                origen: l['origen'],
+                destino: l['destino'],
+            };
+            this.lineas.pushBack(linea);
+        });
+    }
+
     public loadRoute(origen: Parada, destino: Parada) {
         if (origen.tipo == 0) {
             this.posiblesOrigenes = this.estaciones.map(e => e.estacion == origen.nombre);
@@ -106,6 +133,15 @@ export class RouteCalculatorService {
 
         console.log(this.posiblesOrigenes.toArray());
         console.log(this.posiblesDestinos.toArray());
+
+        this.posiblesOrigenes.forEach(o =>{
+            this.posiblesDestinos.forEach(d =>{
+                let ruta = new Ruta(this.estaciones,this.puntos, this.lineas,this.transbordos,this.matrizM,this.matrizT);
+
+                ruta.setRuta(o,d);
+
+            });
+        });
     }
 
     public calculateMatrix() {
@@ -115,6 +151,8 @@ export class RouteCalculatorService {
 
         let lista = this.estaciones.map(e => e.id_matriz != null);
         sort(lista, e => e.id_matriz);
+
+        this.transbordos = lista;
 
         lista.forEach(l => {
             if (!ids.includes(l.id_matriz)) {
@@ -135,7 +173,7 @@ export class RouteCalculatorService {
                             if (o.id_linea == d.id_linea) {
                                 let minId = o.id_estacion > d.id_estacion ? d.id_estacion : o.id_estacion;
                                 let maxId = minId == o.id_estacion ? d.id_estacion : o.id_estacion;
-                                if (lista.map((l) => l.id_linea == o.id_linea && l.id_matriz
+                                if (lista.map((l) => l.id_linea == o.id_linea
                                     && l.id_estacion > minId && l.id_estacion < maxId).size() == 0) {
                                     min = maxId - minId;
                                 }
@@ -153,9 +191,6 @@ export class RouteCalculatorService {
         this.matrizM = matrizM;
         this.matrizT = matrizT;
 
-        this.printM();
-        this.printT();
-
         console.warn('Floyd algorithm');
 
         this.floydAlgorithm();
@@ -165,7 +200,7 @@ export class RouteCalculatorService {
 
     }
 
-    private floydAlgorithm() : void{
+    private floydAlgorithm(): void {
         let n = this.matrizM.size();
         for (let k = 0; k < n; k++) {
             for (let i = 0; i < n; i++) {
@@ -180,17 +215,17 @@ export class RouteCalculatorService {
         }
     }
 
-    private printM() : void{
+    private printM(): void {
         let list = [];
-        this.matrizM.forEach(m =>{
+        this.matrizM.forEach(m => {
             list.push(m.toArray());
         });
         console.table(list);
     }
 
-    private printT() : void {
+    private printT(): void {
         let list = [];
-        this.matrizT.forEach(m =>{
+        this.matrizT.forEach(m => {
             list.push(m.toArray());
         });
         console.table(list);
