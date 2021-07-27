@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Parada } from '../models/stop.interface';
@@ -23,6 +23,9 @@ export class MainComponent implements OnInit {
   public destinationName : string;
 
   private paradas = new Lista<Parada>();
+
+  @ViewChild('swap') swapIcon : ElementRef;
+  private rotate = 270;
 
   constructor(private fb : FormBuilder,
               private stopsService : RoutesService,
@@ -91,6 +94,21 @@ export class MainComponent implements OnInit {
       setTimeout(() => {
         this.loading = false;
       }, 1000);
+    }
+  }
+
+  public swapPlaces(){
+    if(this.origin || this.destination){
+      let origen = this.origin;
+      this.origin = this.destination;
+      this.destination = origen;
+      let icon = this.swapIcon.nativeElement;
+      console.log(icon);
+      icon.setAttribute('style',`transform: rotate(${this.rotate}deg)`);
+      this.rotate += 180;
+      this.form.updateValueAndValidity(); 
+    }else{
+      this.form.markAllAsTouched();
     }
   }
 }

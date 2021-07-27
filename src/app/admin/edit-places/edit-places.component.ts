@@ -15,7 +15,7 @@ export class EditPlacesComponent implements OnInit {
   private puntos = new Lista<PuntoInteres>();
   public filter = '1'; //Filtro de línea
   public propiedad = 'punto_de_interes'; //Ordenar por nombre
-  public lineas = Array.from(Array(7).keys()); //Lineas
+  public lineas = Array.from(Array(8).keys()); //Lineas
   private currentPoint : PuntoInteres;
 
   constructor(private puntosService : PlacesService,

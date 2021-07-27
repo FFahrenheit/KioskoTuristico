@@ -17,7 +17,7 @@ export class EditStationsComponent implements OnInit {
   public estado = ['Habilitada', 'Deshabilitada'];
   public tipo = ['Normal', 'Transbordo'];
   public propiedad = 'estacion';
-  public lineas = Array.from(Array(7).keys());
+  public lineas = Array.from(Array(8).keys());
   private currentStation : Estacion;
 
   constructor(private estacionesService: StationsService,

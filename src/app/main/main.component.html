@@ -12,16 +12,24 @@
                                     [ngClass]="{'text-primary' : get('origen').valid, 'text-secondary' : get('origen').invalid}"></i>
                                 Origen
                             </label>
-                            <select class="form-control custom-select" formControlName="origen" [(ngModel)]="origin"
-                                [class]="getClass('origen')" (ngModelChange)="origin = $event">
-                                <option selected disabled [value]="null">
-                                    Seleccione la estación o PI de origen
-                                </option>
-                                <option *ngFor="let s of stops" [ngValue]="s">
-                                    {{ s.nombre }}
-                                    ({{ s.tipo == 0 ? 'Estación' : 'Punto de interés' }})
-                                </option>
-                            </select>
+                            <div class="input-group">
+                                <select class="form-control custom-select" formControlName="origen" [(ngModel)]="origin"
+                                    [class]="getClass('origen')" (ngModelChange)="origin = $event">
+                                    <option selected disabled [value]="null">
+                                        Seleccione la estación o PI de origen
+                                    </option>
+                                    <option *ngFor="let s of stops" [ngValue]="s">
+                                        {{ s.nombre }}
+                                        ({{ s.tipo == 0 ? 'Estación' : 'Punto de interés' }})
+                                    </option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text swap" title="Intercambiar origen y destino"
+                                    (click)="swapPlaces()">
+                                        <i #swap class="fas fa-exchange-alt fa-rotate-90"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="destino">

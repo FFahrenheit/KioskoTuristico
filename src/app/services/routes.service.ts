@@ -10,10 +10,29 @@ const base_url = environment.base_url;
   providedIn: 'root'
 })
 export class RoutesService {
+  private lines : any;
   private stops : any;
   private errorMessage = 'Error de servicio';
 
   constructor(private http : HttpClient) { }
+
+  public loadLines(){
+    return this.http.get(`${base_url}/lineas`)
+               .pipe(
+                 map(resp=>{
+                   if(resp['ok']){
+                     this.lines = resp['lineas'];
+                     return true;
+                   }
+                   this.errorMessage = resp['error'] || 'No se pudieron obtener las lineas';
+                   return false;
+                 }),catchError(error=>{
+                   console.log(error);
+                   this.errorMessage = 'Error de servidor';
+                   return of(false);
+                 })
+               );
+  }
 
   public loadStops(){
     return this.http.get(`${base_url}/paradas`)
@@ -39,5 +58,9 @@ export class RoutesService {
 
   public getStops(){
     return this.stops;
+  }
+
+  public getLines(){
+    return this.lines;
   }
 }

@@ -44,3 +44,11 @@
     color: rgb(234, 29, 115) !important;
     transition: color 1s, visibility 1s;
 }
+
+.swap{
+    background-color: rgb(245, 245, 245);
+}
+
+.swap i{
+    transition: all 0.5s ease-in-out;
+}
