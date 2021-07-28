@@ -7,6 +7,9 @@ import { Lista } from '../structures/lista.structure';
 import { sort } from '../structures/quicksort.algorithm';
 import { RouteCalculatorService } from '../structures/route-calculator.service';
 
+const prueba_origen = 'Huentitan';
+const prueba_destino = 'Dermatologico';
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -45,8 +48,10 @@ export class MainComponent implements OnInit {
         .subscribe(resp=>{
           if(resp){
             this.makeList(this.stopsService.getStops());
-            this.get('origen').setValue(null);
-            this.get('destino').setValue(null);
+            // this.get('origen').setValue(null);
+            // this.get('destino').setValue(null);
+            this.origin = this.paradas.findUnique( p => p.nombre == prueba_origen && p.tipo == 0);
+            this.destination = this.paradas.findUnique( p => p.nombre == prueba_destino && p.tipo == 0);
           }else{
             this.toastr.error(this.stopsService.getError(),'Error');
           }
@@ -88,8 +93,8 @@ export class MainComponent implements OnInit {
       this.submitted = true;
       this.loading = true;
       // console.log(this.get('origen').value);
-      this.originName = this.destination.nombre;
-      this.destinationName = this.origin.nombre;
+      this.originName = this.origin.nombre;
+      this.destinationName = this.destination.nombre;
       this.route.loadRoute(this.origin as Parada, this.destination as Parada)
       setTimeout(() => {
         this.loading = false;
@@ -103,7 +108,6 @@ export class MainComponent implements OnInit {
       this.origin = this.destination;
       this.destination = origen;
       let icon = this.swapIcon.nativeElement;
-      console.log(icon);
       icon.setAttribute('style',`transform: rotate(${this.rotate}deg)`);
       this.rotate += 180;
       this.form.updateValueAndValidity(); 

@@ -1,3 +1,7 @@
+interface Iter<T>{
+    (item: T, index : number) : void
+}
+
 interface For<T>{
     (item : T) : void
 }
@@ -243,6 +247,16 @@ export class Lista<T>{
         }
     }
 
+    public iterate(callback : Iter<T>) : void {
+        let temp : Nodo<T> = this.listFront;
+        let i = 0;
+        while(temp){
+            callback(temp.data, i);
+            temp = temp.next;
+            i += 1;
+        }
+    }
+
     public includes(obj : T) : boolean{
         let temp : Nodo<T> = this.listFront;
         while(temp){
@@ -295,6 +309,29 @@ export class Lista<T>{
             temp = temp.next;
         }
         return lista;
+    }
+
+    public sublist(begin : number, end : number = this.size()-1) : Lista<T>{
+        if(begin > end){
+            throw `Lista con índices erroneos: (${begin},${end})`;
+        }
+        else if(end >= this.size()){
+            throw 'Limite superior mayor';
+        }else if(begin < 0){
+            throw 'Limite inferior erroneo';
+        }
+        else{
+            let i = 0;
+            let lista = new Lista<T>();
+            let temp : Nodo<T> = this.listFront;
+            for(let i = 0; i <= end; i++){
+                if( i >= begin){
+                    lista.pushFront(temp.data);
+                }
+                temp = temp.next;
+            }
+            return lista;
+        }
     }
 
 }

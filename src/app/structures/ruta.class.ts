@@ -22,10 +22,76 @@ export class Ruta{
     public setRuta(origen : Estacion, destino : Estacion){
         this.origen = this.origenFijo = origen;
         this.destino = this.destinoFijo = destino;
+        this.calculateRoute();
+    }
 
+    
+
+    private calculateRoute() : void{
+        console.clear();
+        
         while(this.origen.id_linea != this.destino.id_linea){
-            console.log('Blurp');
-            return;
+            let posiblesTransbordosOrigen = this.transbordos.map( t => t.id_linea == this.origen.id_linea);
+            let posiblesTransbordosDestino = this.transbordos.map( t=> t.id_linea == this.destino.id_linea);
+            let minPeso = 99;
+            let minOrigen : Estacion;
+            let minDestino : Estacion;
+            let minTransbordos : any[];
+            posiblesTransbordosOrigen.forEach(o=>{
+                posiblesTransbordosDestino.forEach(d=>{
+                    let costoLlegar = Math.abs(o.id_estacion - this.origen.id_estacion);
+                    let costoVolver = Math.abs(d.id_estacion - this.destino.id_estacion);
+                    let costo = costoLlegar + costoVolver;
+                    let origen = o;
+                    let destino = d;
+                    let transbordos = [];
+                    console.log('Nuevo loop?');
+                    while(origen.id_linea != destino.id_linea){
+                        console.log({origen,destino});
+                        costo += this.pesoRecorrido(origen.id_matriz, d.id_matriz) + 1;
+                        transbordos.push(origen);
+
+                        let sigTransbordo = this.destinoRecorrido(origen.id_matriz, destino.id_matriz);
+                        console.log({sigTransbordo});
+                        
+                        /***
+                         * En teoría están en la misma línea...
+                         */
+                        if(sigTransbordo == 99){
+                            costo += this.pesoRecorrido(origen.id_matriz, destino.id_matriz);
+                            let t = this.estaciones.map( e => e.id_matriz == origen.id_matriz);
+                            console.log(t.toArray());
+                            origen = t.findUnique(_t => _t.id_linea == destino.id_linea);
+                            console.log({
+                                origen,
+                                destino
+                            });
+                            if(origen == null){
+                                costo += 100;
+                                console.log('Skipped!');
+                                break;
+                            }else{
+                                transbordos.push(origen);
+                            }
+                        }else{
+                            /***
+                             * Otro transbordo :v
+                             */
+                            origen = this.transbordos.findUnique( t => t.id_matriz
+                                == this.destinoRecorrido(origen.id_matriz, destino.id_matriz));
+                        }
+                    }
+                    if(minPeso > costo){
+                        console.warn('Peso aquí => ' + costo);
+                        minPeso = costo;
+                        minTransbordos = transbordos;
+                    }
+                });
+            });
+            console.warn('MIN PESO = ' + minPeso);
+            console.table(minTransbordos);
+            console.warn('Blurp!');
+            break;
         }
 
         let direccion  = this.destino.id_estacion > this.origen.id_estacion;
@@ -43,17 +109,42 @@ export class Ruta{
 
         sort(estaciones, e => e.id_estacion);
 
-        console.log(estaciones.toArray());
-        console.log(estaciones.reverse().toArray());
-
-        if(direccion){
-            for(let i = 0; i<estaciones.size(); i++){
-                console.log(estaciones.get(i));
-            }
-        }else{
-            for(let j = estaciones.size(); j<estaciones.size(); j++){
-
-            }
+        if(!direccion){
+            estaciones = estaciones.reverse();
         }
+
+        estaciones.iterate( (e, i) =>{
+            if(e == estaciones.front()){
+                console.log('Subirse en ' + e.estacion);
+            }else if(e == estaciones.back()){
+                console.log('Bajarse en ' + e.estacion);
+            }else if(e.id_matriz){
+                estaciones.sublist(i).map(s => s.id_matriz && s.id_matriz != e.id_matriz).forEach(s=>{
+                    let myPath = Math.abs(s.id_estacion - e.id_estacion);
+                    let matrixPond = this.pesoRecorrido(e.id_matriz,s.id_matriz) + 1;
+                    let matrixPath = this.destinoRecorrido(e.id_matriz,s.id_matriz); 
+                    console.log({
+                        'directo': myPath, 
+                        'por matriz': matrixPond,
+                        'destino matriz': matrixPath,
+                        estacion: s.estacion,
+
+                    });
+                });
+                console.log('Pasa por la estación cruce ' + e.estacion);
+            }else{
+                console.log('Pasar ' + e.estacion);
+            }
+        });
+
     }
+
+    private pesoRecorrido(i : number, j : number) : number{
+        return this.M.get(i).get(j);
+    }
+
+    private destinoRecorrido(i : number, j : number) : number{
+        return this.T.get(i).get(j);
+    }
+
 }
