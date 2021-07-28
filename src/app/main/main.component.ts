@@ -7,8 +7,8 @@ import { Lista } from '../structures/lista.structure';
 import { sort } from '../structures/quicksort.algorithm';
 import { RouteCalculatorService } from '../structures/route-calculator.service';
 
-const prueba_origen = 'Huentitan';
-const prueba_destino = 'Dermatologico';
+const prueba_origen = 'Haciendas';
+const prueba_destino = 'Huentitan';
 
 @Component({
   selector: 'app-main',

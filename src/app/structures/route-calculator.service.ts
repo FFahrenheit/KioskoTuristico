@@ -133,13 +133,13 @@ export class RouteCalculatorService {
 
         console.log(this.posiblesOrigenes.toArray());
         console.log(this.posiblesDestinos.toArray());
-
+        
+        // console.clear();
         this.posiblesOrigenes.forEach(o =>{
             this.posiblesDestinos.forEach(d =>{
+                // console.table(['aqui k']);
                 let ruta = new Ruta(this.estaciones,this.puntos, this.lineas,this.transbordos,this.matrizM,this.matrizT);
-
                 ruta.setRuta(o,d);
-
             });
         });
     }
