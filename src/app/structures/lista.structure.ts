@@ -326,7 +326,7 @@ export class Lista<T>{
             let temp : Nodo<T> = this.listFront;
             for(let i = 0; i <= end; i++){
                 if( i >= begin){
-                    lista.pushFront(temp.data);
+                    lista.pushBack(temp.data);
                 }
                 temp = temp.next;
             }

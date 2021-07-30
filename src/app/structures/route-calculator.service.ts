@@ -3,6 +3,7 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Linea } from '../models/line.interface';
 import { PuntoInteres } from '../models/place.interface';
+import { RutaFinal } from '../models/route.interface';
 import { Estacion } from '../models/station.interface';
 import { Parada } from '../models/stop.interface';
 import { PlacesService } from '../services/places.service';
@@ -21,6 +22,8 @@ export class RouteCalculatorService {
     private puntos = new Lista<PuntoInteres>();
     private lineas = new Lista<Linea>();
     private transbordos = new Lista<Estacion>();
+    private ruta : Ruta;
+    private rutaFinal : RutaFinal;
 
     private posiblesOrigenes = new Lista<Estacion>();
     private posiblesDestinos = new Lista<Estacion>();
@@ -62,6 +65,7 @@ export class RouteCalculatorService {
             console.log(this.puntos);
             console.log(this.lineas);
             this.calculateMatrix();
+            this.ruta = new Ruta(this.estaciones,this.puntos, this.lineas,this.transbordos,this.matrizM,this.matrizT);
         });
     }
 
@@ -135,13 +139,19 @@ export class RouteCalculatorService {
         console.log(this.posiblesDestinos.toArray());
         
         // console.clear();
+        let minPeso = 999;
         this.posiblesOrigenes.forEach(o =>{
             this.posiblesDestinos.forEach(d =>{
-                // console.table(['aqui k']);
-                let ruta = new Ruta(this.estaciones,this.puntos, this.lineas,this.transbordos,this.matrizM,this.matrizT);
-                ruta.setRuta(o,d);
+                let ruta = this.ruta.setRuta(o,d);
+                if(ruta.peso < minPeso){
+                    this.rutaFinal = ruta;
+                    minPeso = ruta.peso;
+                }
             });
         });
+        console.error('hola!');
+
+        console.log(this.rutaFinal);
     }
 
     public calculateMatrix() {

@@ -1,5 +1,6 @@
 import { Linea } from "../models/line.interface";
 import { PuntoInteres } from "../models/place.interface";
+import { Point, RutaFinal, Tramo } from "../models/route.interface";
 import { Estacion } from "../models/station.interface";
 import { Lista } from "./lista.structure";
 import { sort } from "./quicksort.algorithm";
@@ -22,13 +23,13 @@ export class Ruta {
         private M: Lista<Lista<number>>,
         private T: Lista<Lista<number>>) { }
 
-    public setRuta(origen: Estacion, destino: Estacion) {
+    public setRuta(origen: Estacion, destino: Estacion) : RutaFinal {
         this.origen = this.origenFijo = origen;
         this.destino = this.destinoFijo = destino;
-        this.calculateRoute();
+        return this.calculateRoute();
     }
 
-    private calculateRoute(): void {
+    private calculateRoute(): RutaFinal {
         console.clear();
 
         let minPeso = 999;
@@ -36,34 +37,38 @@ export class Ruta {
         let posiblesTransbordosOrigen = this.transbordos.map(t => t.id_linea == this.origen.id_linea);
         let posiblesTransbordosDestino = this.transbordos.map(t => t.id_linea == this.destino.id_linea);
 
-        let minTransbordos: any[];
+        let minRuta: RutaFinal;
 
         posiblesTransbordosOrigen.forEach(o => {
             posiblesTransbordosDestino.forEach(d => {
-                let costo = this.calcularCosto(o,d);
-                if (minPeso > costo) {
-                    minPeso = costo;
-                    // minTransbordos = transbordos;
+                let ruta = this.calcularCosto(o, d);
+                if (minPeso > ruta.peso) {
+                    minPeso = ruta.peso;
+                    minRuta = ruta;
                 }
             });
         });
         console.warn('MIN PESO = ' + minPeso);
-        console.table(minTransbordos);
-        console.warn('Blurp!');
 
+        return minRuta;
     }
 
-    private calcularCosto(o : Estacion, d : Estacion) :  number{
-        let costoIr = this.tramo(o,this.origen);
-        let costoLlegar = this.tramo(d, this.destino); 
-        
+    private calcularCosto(o: Estacion, d: Estacion): RutaFinal {
+        let rutaFinal: RutaFinal = {
+            peso : 0,
+            lineas : new Lista<Tramo>() 
+        };
+
+        let costoIr = this.tramo(o, this.origen);
+        let costoLlegar = this.tramo(d, this.destino);
+
         console.warn('Nuevo cálculo');
         console.log({
-             aORIGEN: o,
-             bCostoOrigen: costoIr,
-             cDESTINO: d,
-             dCostoDestino: costoLlegar 
-            });
+            aORIGEN: o,
+            bCostoOrigen: costoIr,
+            cDESTINO: d,
+            dCostoDestino: costoLlegar
+        });
 
         let costo = costoLlegar + costoIr + this.costoEspera;
 
@@ -71,8 +76,11 @@ export class Ruta {
         let destino = d;
         let transbordos = [];
 
-        if(origen.id_linea == destino.id_linea){
-            costo += this.tramo(origen,destino);
+        if (origen.id_linea == destino.id_linea) {
+            costo += this.tramo(origen, destino);
+            let tramo: Tramo;
+            tramo.estacion = this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion);
+            rutaFinal.lineas.pushBack(tramo);
         }
 
         while (origen.id_linea != destino.id_linea) {
@@ -83,7 +91,7 @@ export class Ruta {
             let sigTransbordo = this.destinoRecorrido(origen.id_matriz, destino.id_matriz);
             console.log({ costoMovimiento, sigTransbordo });
 
-            if(costoMovimiento != 0){
+            if (costoMovimiento != 0) {
                 transbordos.push(origen);
             }
 
@@ -91,6 +99,7 @@ export class Ruta {
              * En teoría están en la misma línea...
              */
             if (sigTransbordo == 99) {
+                console.log('ANDO VIENDO  ' + this.pesoRecorrido(origen.id_matriz, destino.id_matriz)); //Si es necesario
                 costo += this.pesoRecorrido(origen.id_matriz, destino.id_matriz);
                 let s = this.estaciones.map(e => e.id_matriz == destino.id_matriz);
                 let t = this.estaciones.map(e => e.id_matriz == origen.id_matriz);
@@ -102,32 +111,41 @@ export class Ruta {
                         }
                     })
                 });
+
+                let tramo : Tramo = {
+                    estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion)
+                };
+
+                rutaFinal.lineas.pushBack(tramo);
+
                 console.log({
                     origen,
                     destino
                 });
-                if (origen && destino) {
-                    transbordos.push(destino);
-                } else {
-                    costo += 100;
-                    console.error('Skipped!');
-                    break;
-                }
+                transbordos.push(destino);
             } else {
                 /***
                  * Otro transbordo :v
                  */
-                origen = this.transbordos.findUnique(t => t.id_matriz
+                let nuevoOrigen = this.transbordos.findUnique(t => t.id_matriz
                     == this.destinoRecorrido(origen.id_matriz, destino.id_matriz));
+                
+                let tramo: Tramo = {
+                    estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, nuevoOrigen.id_estacion) 
+                };
+                rutaFinal.lineas.pushBack(tramo);
+                
+                origen = nuevoOrigen;
             }
         }
-        // console.error('Peso aquí => ' + costo);
         console.table(transbordos);
         console.error('Peso aquí => ' + costo);
-        return costo;
+
+        rutaFinal.peso = costo;
+        return rutaFinal;
     }
 
-    private tramo(a : Estacion, b : Estacion) : number{
+    private tramo(a: Estacion, b: Estacion): number {
         return Math.abs(a.id_estacion - b.id_estacion) * this.costoEstacion;
     }
 
@@ -158,7 +176,7 @@ export class Ruta {
                 console.log('Bajarse en ' + e.estacion);
             } else if (e.id_matriz) {
                 estaciones.sublist(i).map(s => s.id_matriz && s.id_matriz != e.id_matriz).forEach(s => {
-                    let myPath = this.tramo(s,e);
+                    let myPath = this.tramo(s, e);
                     let matrixPond = this.pesoRecorrido(e.id_matriz, s.id_matriz) + 1;
                     let matrixPath = this.destinoRecorrido(e.id_matriz, s.id_matriz);
                     console.log({
@@ -176,6 +194,47 @@ export class Ruta {
         });
 
         return estaciones.size();
+    }
+
+    private getEstaciones(linea: number, inicio: number, fin: number): Lista<Point> {
+        let lista = new Lista<Point>();
+
+        let direccion = fin > inicio;
+        let min = direccion ? inicio : fin;
+        let max = direccion ? fin : inicio;
+        let estaciones: Lista<Estacion> = this.estaciones.map(e => e.id_linea == linea
+            && e.id_estacion >= min && e.id_estacion <= max);
+
+        sort(estaciones, e => e.id_estacion);
+
+        if (!direccion) {
+            estaciones.reverse();
+        }
+
+        estaciones.forEach(e => {
+            let interes: Lista<string> = this.getPuntos(e.id_kiosco);
+
+            let point: Point = {
+                estacion: e.estacion,
+                id: e.id_estacion,
+                puntos: interes
+            };
+
+            lista.pushBack(point);
+
+        });
+
+        return lista;
+    }
+
+    private getPuntos(id: number): Lista<string> {
+        let lista = new Lista<string>();
+
+        this.puntos.map(p => p.id_kiosco == id).forEach(p => {
+            lista.pushBack(p.punto_de_interes);
+        });
+
+        return lista;
     }
 
     private pesoRecorrido(i: number, j: number): number {
