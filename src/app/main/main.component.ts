@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Point, RutaFinal, Tramo } from '../models/route.interface';
 import { Parada } from '../models/stop.interface';
 import { RoutesService } from '../services/routes.service';
 import { Lista } from '../structures/lista.structure';
@@ -24,7 +25,8 @@ export class MainComponent implements OnInit {
   public destination : Parada;
   public originName : string;
   public destinationName : string;
-
+  
+  private rutaFinal : RutaFinal;
   private paradas = new Lista<Parada>();
 
   @ViewChild('swap') swapIcon : ElementRef;
@@ -98,6 +100,7 @@ export class MainComponent implements OnInit {
       this.route.loadRoute(this.origin as Parada, this.destination as Parada)
       setTimeout(() => {
         this.loading = false;
+        this.rutaFinal = this.route.getRoute();
       }, 1000);
     }
   }
@@ -115,4 +118,27 @@ export class MainComponent implements OnInit {
       this.form.markAllAsTouched();
     }
   }
+
+  public get stations() : Tramo[]{
+    console.log(this.rutaFinal.lineas.toArray());
+    return this.rutaFinal.lineas.toArray();
+  }
+
+  public getPoints(tramo : Tramo) : Point[]{
+    console.log(tramo.estacion.toArray());
+    return tramo.estacion.toArray();
+  }
+
+  public getInterest(punto : Point) : string[]{
+    return punto.puntos.toArray();
+  }
+
+  public getStartText(tramo : Tramo, index : number) : string{
+    if(index == 0){
+      return `Suba a la estación ${ tramo.estacion.front().estacion } de la línea ${tramo.linea} con dirección a ${tramo.direccion }`;
+    }else{
+      return `Transborde en la estación ${ tramo.estacion.front().estacion } a la línea ${tramo.linea} con dirección a ${tramo.direccion }`;
+    }
+  }
+
 }

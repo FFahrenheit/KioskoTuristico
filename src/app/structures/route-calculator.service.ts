@@ -61,9 +61,10 @@ export class RouteCalculatorService {
             })));
 
         forkJoin(calls).subscribe(resp => {
-            console.log(this.estaciones);
-            console.log(this.puntos);
-            console.log(this.lineas);
+            console.log(this.estaciones.toArray());
+            sort(this.puntos, p => p.punto_de_interes);
+            console.log(this.puntos.toArray());
+            console.log(this.lineas.toArray());
             this.calculateMatrix();
             this.ruta = new Ruta(this.estaciones,this.puntos, this.lineas,this.transbordos,this.matrizM,this.matrizT);
         });
@@ -86,6 +87,7 @@ export class RouteCalculatorService {
 
     private makePlacesList(puntos: any[]) {
         this.puntos.clear();
+        console.log(puntos);
         puntos.forEach(p => {
             const punto: PuntoInteres = {
                 estacion: p['estacion'],
@@ -152,6 +154,10 @@ export class RouteCalculatorService {
         console.error('hola!');
 
         console.log(this.rutaFinal);
+    }
+
+    public getRoute() : RutaFinal {
+        return this.rutaFinal;
     }
 
     public calculateMatrix() {
@@ -256,5 +262,13 @@ export class RouteCalculatorService {
     private getT(i: number, j: number): number {
         return this.matrizT.get(i).get(j);
     }
+
+    public getDirection(id : number, direction : boolean){
+        if(direction){
+          return this.lineas.findMap(l => l.id_linea == id).destino;
+        }else{
+            return this.lineas.findMap(l => l.id_linea == id).origen;
+        }
+      }
 
 }

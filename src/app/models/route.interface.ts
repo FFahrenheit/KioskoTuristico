@@ -6,6 +6,8 @@ export interface RutaFinal{
 }
 
 export interface Tramo{
+    linea : number,
+    direccion : string,
     estacion : Lista<Point>
 }
 
@@ -13,4 +15,4 @@ export interface Point{
     estacion : string,
     id : number,
     puntos : Lista<string>
-}
+} 

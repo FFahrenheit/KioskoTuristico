@@ -62,12 +62,26 @@ export class Ruta {
         let costoIr = this.tramo(o, this.origen);
         let costoLlegar = this.tramo(d, this.destino);
 
+        let caminoIr : Tramo = {
+            linea: o.id_linea,
+            estacion: this.getEstaciones(o.id_linea, this.origen.id_estacion, o.id_estacion ),
+            direccion: this.getDirection(o.id_linea, this.origen.id_estacion < o.id_estacion)
+        }
+
+        let caminoLlegar : Tramo = {
+            linea: d.id_linea,
+            estacion: this.getEstaciones(d.id_linea, d.id_estacion, this.destino.id_estacion ),
+            direccion: this.getDirection(d.id_linea, d.id_estacion < this.destino.id_estacion)
+        }
+
         console.warn('Nuevo cálculo');
         console.log({
             aORIGEN: o,
             bCostoOrigen: costoIr,
-            cDESTINO: d,
-            dCostoDestino: costoLlegar
+            cOrigenOriginal : this.origen,
+            dDESTINO: d,
+            eCostoDestino: costoLlegar,
+            fDestinoOriginal: this.destino
         });
 
         let costo = costoLlegar + costoIr + this.costoEspera;
@@ -112,11 +126,15 @@ export class Ruta {
                     })
                 });
 
-                let tramo : Tramo = {
-                    estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion)
-                };
+                if(origen.id_matriz != destino.id_matriz){
+                    let tramo : Tramo = {
+                        linea: origen.id_linea,
+                        estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion),
+                        direccion: this.getDirection(origen.id_linea, origen.id_estacion < destino.id_estacion)
+                    };
+                    rutaFinal.lineas.pushBack(tramo);
+                }
 
-                rutaFinal.lineas.pushBack(tramo);
 
                 console.log({
                     origen,
@@ -131,7 +149,9 @@ export class Ruta {
                     == this.destinoRecorrido(origen.id_matriz, destino.id_matriz));
                 
                 let tramo: Tramo = {
-                    estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, nuevoOrigen.id_estacion) 
+                    linea: origen.id_linea,
+                    estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, nuevoOrigen.id_estacion),
+                    direccion : this.getDirection(origen.id_linea, origen.id_estacion < nuevoOrigen.id_estacion) 
                 };
                 rutaFinal.lineas.pushBack(tramo);
                 
@@ -141,6 +161,8 @@ export class Ruta {
         console.table(transbordos);
         console.error('Peso aquí => ' + costo);
 
+        rutaFinal.lineas.pushFront(caminoIr);
+        rutaFinal.lineas.pushBack(caminoLlegar);
         rutaFinal.peso = costo;
         return rutaFinal;
     }
@@ -149,57 +171,11 @@ export class Ruta {
         return Math.abs(a.id_estacion - b.id_estacion) * this.costoEstacion;
     }
 
-    private faltante(): number {
-        let direccion = this.destino.id_estacion > this.origen.id_estacion;
-
-        let l = this.lineas.findUnique(l => l.id_linea == this.origen.id_linea);
-        let linea = direccion ? l.destino : l.origen;
-        let min = direccion ? this.origen : this.destino;
-        let max = direccion ? this.destino : this.origen;
-
-        console.log('LINEA: Tomar la línea hacia ' + linea);
-
-        let estaciones = this.estaciones.map((l) => {
-            return l.id_linea == this.origen.id_linea && l.id_estacion >= min.id_estacion && l.id_estacion <= max.id_estacion
-        });
-
-        sort(estaciones, e => e.id_estacion);
-
-        if (!direccion) {
-            estaciones = estaciones.reverse();
-        }
-
-        estaciones.iterate((e, i) => {
-            if (e == estaciones.front()) {
-                console.log('Subirse en ' + e.estacion);
-            } else if (e == estaciones.back()) {
-                console.log('Bajarse en ' + e.estacion);
-            } else if (e.id_matriz) {
-                estaciones.sublist(i).map(s => s.id_matriz && s.id_matriz != e.id_matriz).forEach(s => {
-                    let myPath = this.tramo(s, e);
-                    let matrixPond = this.pesoRecorrido(e.id_matriz, s.id_matriz) + 1;
-                    let matrixPath = this.destinoRecorrido(e.id_matriz, s.id_matriz);
-                    console.log({
-                        'directo': myPath,
-                        'por matriz': matrixPond,
-                        'destino matriz': matrixPath,
-                        estacion: s.estacion,
-
-                    });
-                });
-                console.log('Pasa por la estación cruce ' + e.estacion);
-            } else {
-                console.log('Pasar ' + e.estacion);
-            }
-        });
-
-        return estaciones.size();
-    }
-
     private getEstaciones(linea: number, inicio: number, fin: number): Lista<Point> {
+        console.log({linea, inicio, fin});
         let lista = new Lista<Point>();
 
-        let direccion = fin > inicio;
+        let direccion = inicio < fin;
         let min = direccion ? inicio : fin;
         let max = direccion ? fin : inicio;
         let estaciones: Lista<Estacion> = this.estaciones.map(e => e.id_linea == linea
@@ -208,7 +184,7 @@ export class Ruta {
         sort(estaciones, e => e.id_estacion);
 
         if (!direccion) {
-            estaciones.reverse();
+            estaciones = estaciones.reverse();
         }
 
         estaciones.forEach(e => {
@@ -224,6 +200,7 @@ export class Ruta {
 
         });
 
+        console.log(lista.toArray());
         return lista;
     }
 
@@ -234,6 +211,12 @@ export class Ruta {
             lista.pushBack(p.punto_de_interes);
         });
 
+        console.log( { 
+            id,
+            lista : lista.toArray()
+         });
+
+
         return lista;
     }
 
@@ -243,6 +226,13 @@ export class Ruta {
 
     private destinoRecorrido(i: number, j: number): number {
         return this.T.get(i).get(j);
+    }
+
+    private getDirection(id : number, direction : boolean){
+        if(direction){
+            return this.lineas.findUnique(l => l.id_linea == id).destino;
+        }
+        return this.lineas.findUnique(l => l.id_linea == id).origen;
     }
 
 }
