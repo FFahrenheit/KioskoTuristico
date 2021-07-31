@@ -28,4 +28,8 @@ export class AdminComponent implements OnInit {
     localStorage.setItem('index',index);
   }
 
+  inicio(){
+    this.router.navigate(['inicio']);
+  }
+
 }

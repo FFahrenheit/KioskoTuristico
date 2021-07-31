@@ -11,7 +11,7 @@ let createWindow = () => {
         height: 1080,
         backgroundColor: '#ffffff',
         icon: url.format({
-            pathname: path.join(__dirname, `/dist/assets/icon.png`),
+            pathname: path.join(__dirname, `/icon.png`),
             protocol: "file:",
             slashes: true
           }) 
