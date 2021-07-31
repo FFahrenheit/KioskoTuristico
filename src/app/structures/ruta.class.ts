@@ -16,12 +16,12 @@ export class Ruta {
     private costoEspera = 2;
     private costoEstacion = 1;
 
-    constructor(private estaciones: Lista<Estacion>,
-        private puntos: Lista<PuntoInteres>,
-        private lineas: Lista<Linea>,
-        private transbordos: Lista<Estacion>,
-        private M: Lista<Lista<number>>,
-        private T: Lista<Lista<number>>) { }
+    constructor(private estaciones  : Lista<Estacion>,
+                private puntos      : Lista<PuntoInteres>,
+                private lineas      : Lista<Linea>,
+                private transbordos : Lista<Estacion>,
+                private M           : Lista<Lista<number>>,
+                private T           : Lista<Lista<number>>) { }
 
     public setRuta(origen: Estacion, destino: Estacion) : RutaFinal {
         this.origen = this.origenFijo = origen;
@@ -103,7 +103,7 @@ export class Ruta {
             costo += costoMovimiento + this.costoTransbordo;
 
             let sigTransbordo = this.destinoRecorrido(origen.id_matriz, destino.id_matriz);
-            console.log({ costoMovimiento, sigTransbordo });
+            // console.log({ costoMovimiento, sigTransbordo });
 
             if (costoMovimiento != 0) {
                 transbordos.push(origen);
@@ -136,10 +136,10 @@ export class Ruta {
                 }
 
 
-                console.log({
-                    origen,
-                    destino
-                });
+                // console.log({
+                //     origen,
+                //     destino
+                // });
                 transbordos.push(destino);
             } else {
                 /***
@@ -158,7 +158,7 @@ export class Ruta {
                 origen = nuevoOrigen;
             }
         }
-        console.table(transbordos);
+        // console.table(transbordos);
         console.error('Peso aquí => ' + costo);
 
         rutaFinal.lineas.pushFront(caminoIr);
@@ -200,7 +200,7 @@ export class Ruta {
 
         });
 
-        console.log(lista.toArray());
+        // console.log(lista.toArray());
         return lista;
     }
 
@@ -208,14 +208,13 @@ export class Ruta {
         let lista = new Lista<string>();
 
         this.puntos.map(p => p.id_kiosco == id).forEach(p => {
-            lista.pushBack(p.punto_de_interes);
+            lista.pushFront(p.punto_de_interes);
         });
 
-        console.log( { 
-            id,
-            lista : lista.toArray()
-         });
-
+        // console.log( { 
+        //     id,
+        //     lista : lista.toArray()
+        //  });
 
         return lista;
     }

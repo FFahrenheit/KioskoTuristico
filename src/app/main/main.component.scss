@@ -1,24 +1,24 @@
-.special-card{
+.special-card {
     border-radius: 25px;
     opacity: 0.91;
 }
 
-.special-card:hover{
+.special-card:hover {
     opacity: 1;
     cursor: pointer;
 }
 
-.form-group label{
+.form-group label {
     font-size: 18px;
     font-weight: 300;
     color: black;
 }
 
-.disabled:hover{
+.disabled:hover {
     cursor: default !important;
 }
 
-.round{
+.round {
     border-radius: 25px;
 }
 
@@ -30,29 +30,41 @@
     overflow-y: auto;
 }
 
-.spin{
+.spin {
     color: rgb(234, 29, 115) !important;
     width: 50px;
     height: 50px;
 }
 
-.loading{
+.loading {
     font-style: italic;
 }
 
-.primary{
+.primary {
     color: rgb(234, 29, 115) !important;
     transition: color 1s, visibility 1s;
 }
 
-.swap{
+.swap {
     background-color: rgb(245, 245, 245);
 }
 
-.swap i{
+.swap i {
     transition: all 0.5s ease-in-out;
 }
 
-.route{
+.route li {
+    font-size: 22px;
+}
+
+.bold {
+    font-weight: bolder;
+}
+
+.bold-minus{
+    font-weight: 600;
+}
+
+.resume{
     font-size: 22px;
 }

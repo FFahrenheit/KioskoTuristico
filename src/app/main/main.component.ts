@@ -8,8 +8,8 @@ import { Lista } from '../structures/lista.structure';
 import { sort } from '../structures/quicksort.algorithm';
 import { RouteCalculatorService } from '../structures/route-calculator.service';
 
-const prueba_origen = 'Haciendas';
-const prueba_destino = 'Huentitan';
+const prueba_origen = null;
+const prueba_destino = null;
 
 @Component({
   selector: 'app-main',
@@ -32,10 +32,10 @@ export class MainComponent implements OnInit {
   @ViewChild('swap') swapIcon : ElementRef;
   private rotate = 270;
 
-  constructor(private fb : FormBuilder,
-              private stopsService : RoutesService,
-              private toastr : ToastrService,
-              private route : RouteCalculatorService) { }
+  constructor(private fb            : FormBuilder,
+              private stopsService  : RoutesService,
+              private toastr        : ToastrService,
+              private route         : RouteCalculatorService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -101,7 +101,7 @@ export class MainComponent implements OnInit {
       setTimeout(() => {
         this.loading = false;
         this.rutaFinal = this.route.getRoute();
-      }, 1000);
+      }, 2000);
     }
   }
 
@@ -133,12 +133,8 @@ export class MainComponent implements OnInit {
     return punto.puntos.toArray();
   }
 
-  public getStartText(tramo : Tramo, index : number) : string{
-    if(index == 0){
-      return `Suba a la estación ${ tramo.estacion.front().estacion } de la línea ${tramo.linea} con dirección a ${tramo.direccion }`;
-    }else{
-      return `Transborde en la estación ${ tramo.estacion.front().estacion } a la línea ${tramo.linea} con dirección a ${tramo.direccion }`;
-    }
+  public get finalRoute(){
+    return this.rutaFinal;
   }
 
 }

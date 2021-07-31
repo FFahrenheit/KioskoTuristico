@@ -59,9 +59,33 @@
                     </form>
                 </div>
             </div>
+
+            <div  class="card m-3 special-card" *ngIf="submitted && !loading"> 
+                <div class="card-body resume">
+                    <h4 class="text-center">Resumen de trayecto</h4>
+                    <i class="fas fa-clock"></i>
+                    <span class="bold-minus">
+                        Tiempo estimado: 
+                    </span>
+                    {{ finalRoute.peso }} minutos
+                    <br>
+                    <i class="fas fa-bus"></i>
+                    <span class="bold-minus">
+                        Número de transbordos: 
+                    </span>
+                    {{ finalRoute.lineas.size() - 1 }}
+                    {{ finalRoute.lineas.size() == 2 ? ' transbordo' : ' transbordos' }}
+                    <br>
+                    <i class="fas fa-coins"></i>
+                    <span class="bold-minus">
+                        Costo total: 
+                    </span>
+                    ${{ 9.5 * 1 + (finalRoute.lineas.size() - 1)*4.75 }}
+                </div>
+            </div>
         </div>
         <div class="col-md-8">
-            <div class="card m-3 round" *ngIf="submitted || true">
+            <div class="card m-3 round" *ngIf="submitted">
                 <div class="card-header">
                     <h2 class="header-route">
                         <i class="fas fa-route" [ngClass]="{'text-secondary':loading, 'primary' : !loading}"></i>
@@ -70,7 +94,7 @@
                 </div>
                 <div class="card-body scroll">
                     <div class="text-center align-center content-route" *ngIf="loading; else route">
-                        <h4 class="loading">Cargando ruta ... </h4>
+                        <h4 class="loading">Calculando ruta ... </h4>
                         <div class="spinner-grow text-primary spin" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -78,9 +102,39 @@
                     <ng-template #route>
                         <div class="selector route">
                             <ul>
-                                <li *ngFor="let s of stations; let i = index; let l = last">
-                                    {{ getStartText(s,i) }} <br>
-                                    Pasará por:
+                                <li *ngFor="let s of stations; let i = index; let l = last; let f = first"
+                                    class="no-li">
+                                    <span *ngIf="f">
+                                        Suba a la estación
+                                        <span class="bold">
+                                            {{ s.estacion.front().estacion }}
+                                        </span>
+                                        de la
+                                        <span class="bold">
+                                            línea {{ s.linea }}
+                                        </span>
+                                        con dirección a
+                                        <span class="bold">
+                                            {{ s.direccion }}
+                                        </span>
+                                    </span>
+                                    <span *ngIf="!f">
+                                        Transborde en la estación
+                                        <span class="bold">
+                                            {{ s.estacion.front().estacion }}
+                                        </span>
+                                        a la
+                                        <span class="bold">
+                                            línea {{ s.linea }}
+                                        </span>
+                                        con dirección a
+                                        <span class="bold">
+                                            {{ s.direccion }}
+                                        </span>
+                                    </span>
+
+                                    <br>
+                                    Pasará por las estaciones:
 
                                     <ul>
                                         <li *ngFor="let p of getPoints(s).slice(1,-1); let j = index;">
@@ -97,11 +151,14 @@
 
                                         </li>
                                     </ul>
-                                    Baje en 
-                                    {{ s.estacion.back().estacion }}
-                                    <span *ngIf="l">
+                                    Baje en
+                                    <span class="bold">
+                                        {{ s.estacion.back().estacion }}
+                                    </span>
+                                    <span *ngIf="l" class="bold">
                                         <br>
-                                        Ha llegado a su destino
+                                        <i class="fas fa-flag"></i>
+                                        ¡Ha llegado a su destino!
                                     </span>
                                 </li>
                             </ul>
