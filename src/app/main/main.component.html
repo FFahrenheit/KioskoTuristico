@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-            <div  class="card m-3 special-card" *ngIf="submitted && !loading"> 
+            <div  class="card m-3 special-card" *ngIf="submitted && !loading && !error"> 
                 <div class="card-body resume">
                     <h4 class="text-center">Resumen de trayecto</h4>
                     <i class="fas fa-clock"></i>
@@ -84,6 +84,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-8">
             <div class="card m-3 round" *ngIf="submitted">
                 <div class="card-header">
@@ -100,7 +101,7 @@
                         </div>
                     </div>
                     <ng-template #route>
-                        <div class="selector route">
+                        <div class="selector route" *ngIf="!error">
                             <ul>
                                 <li *ngFor="let s of stations; let i = index; let l = last; let f = first"
                                     class="no-li">
@@ -162,6 +163,10 @@
                                     </span>
                                 </li>
                             </ul>
+                        </div>
+                        <div class="text-center align-center content-route" *ngIf="error">
+                            <h4 class="loading">No se pudo encontrar la ruta</h4>
+                            <i class="fas fa-exclamation-triangle text-danger big-icon"></i>
                         </div>
                     </ng-template>
                 </div>

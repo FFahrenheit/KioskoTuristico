@@ -20,6 +20,7 @@ export class MainComponent implements OnInit {
 
   public form : FormGroup;
   public submitted = false;
+  public error = false;
   public loading : boolean = true;
   public origin : Parada;
   public destination : Parada;
@@ -91,16 +92,18 @@ export class MainComponent implements OnInit {
 
   public submit(){
     this.form.markAllAsTouched();
+    this.rutaFinal = null;
     if(this.form.valid){
       this.submitted = true;
       this.loading = true;
       // console.log(this.get('origen').value);
       this.originName = this.origin.nombre;
       this.destinationName = this.destination.nombre;
-      this.route.loadRoute(this.origin as Parada, this.destination as Parada)
+      this.route.loadRoute(this.origin as Parada, this.destination as Parada);
+      this.rutaFinal = this.route.getRoute();
       setTimeout(() => {
         this.loading = false;
-        this.rutaFinal = this.route.getRoute();
+        this.error = this.rutaFinal == null;
       }, 2000);
     }
   }

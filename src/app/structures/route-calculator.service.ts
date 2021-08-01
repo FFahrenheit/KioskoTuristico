@@ -113,6 +113,9 @@ export class RouteCalculatorService {
     }
 
     public loadRoute(origen: Parada, destino: Parada) {
+        this.posiblesOrigenes.clear();
+        this.posiblesDestinos.clear();
+
         if (origen.tipo == 0) {
             this.posiblesOrigenes = this.estaciones.map(e => e.estacion == origen.nombre);
         } else {
@@ -151,7 +154,6 @@ export class RouteCalculatorService {
                 }
             });
         });
-        console.error('hola!');
 
         console.log(this.rutaFinal);
     }
