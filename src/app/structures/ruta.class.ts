@@ -92,78 +92,83 @@ export class Ruta {
 
         if (origen.id_linea == destino.id_linea) {
             costo += this.tramo(origen, destino);
-            let tramo: Tramo;
-            tramo.estacion = this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion);
+            let tramo: Tramo = {
+                estacion : this.getEstaciones(origen.id_linea, this.origen.id_estacion, this.destino.id_estacion),
+                linea : origen.id_linea,
+                direccion : this.getDirection(origen.id_linea, this.origen.id_estacion < this.destino.id_estacion)
+            };
             rutaFinal.lineas.pushBack(tramo);
-        }
-
-        while (origen.id_linea != destino.id_linea) {
-            console.log({ origen, destino });
-            let costoMovimiento = this.pesoRecorrido(origen.id_matriz, d.id_matriz);
-            costo += costoMovimiento + this.costoTransbordo;
-
-            let sigTransbordo = this.destinoRecorrido(origen.id_matriz, destino.id_matriz);
-            // console.log({ costoMovimiento, sigTransbordo });
-
-            if (costoMovimiento != 0) {
-                transbordos.push(origen);
-            }
-
-            /***
-             * En teoría están en la misma línea...
-             */
-            if (sigTransbordo == 99) {
-                console.log('ANDO VIENDO  ' + this.pesoRecorrido(origen.id_matriz, destino.id_matriz)); //Si es necesario
-                costo += this.pesoRecorrido(origen.id_matriz, destino.id_matriz);
-                let s = this.estaciones.map(e => e.id_matriz == destino.id_matriz);
-                let t = this.estaciones.map(e => e.id_matriz == origen.id_matriz);
-                s.forEach(_s => {
-                    t.forEach(_t => {
-                        if (_s.id_linea == _t.id_linea) {
-                            origen = _t;
-                            destino = _s;
-                        }
-                    })
-                });
-
-                if(origen.id_matriz != destino.id_matriz){
-                    let tramo : Tramo = {
+        }else{
+            while (origen.id_linea != destino.id_linea) {
+                console.log({ origen, destino });
+                let costoMovimiento = this.pesoRecorrido(origen.id_matriz, d.id_matriz);
+                costo += costoMovimiento + this.costoTransbordo;
+    
+                let sigTransbordo = this.destinoRecorrido(origen.id_matriz, destino.id_matriz);
+                // console.log({ costoMovimiento, sigTransbordo });
+    
+                if (costoMovimiento != 0) {
+                    transbordos.push(origen);
+                }
+    
+                /***
+                 * En teoría están en la misma línea...
+                 */
+                if (sigTransbordo == 99) {
+                    console.log('ANDO VIENDO  ' + this.pesoRecorrido(origen.id_matriz, destino.id_matriz)); //Si es necesario
+                    costo += this.pesoRecorrido(origen.id_matriz, destino.id_matriz);
+                    let s = this.estaciones.map(e => e.id_matriz == destino.id_matriz);
+                    let t = this.estaciones.map(e => e.id_matriz == origen.id_matriz);
+                    s.forEach(_s => {
+                        t.forEach(_t => {
+                            if (_s.id_linea == _t.id_linea) {
+                                origen = _t;
+                                destino = _s;
+                            }
+                        })
+                    });
+    
+                    if(origen.id_matriz != destino.id_matriz){
+                        let tramo : Tramo = {
+                            linea: origen.id_linea,
+                            estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion),
+                            direccion: this.getDirection(origen.id_linea, origen.id_estacion < destino.id_estacion)
+                        };
+                        rutaFinal.lineas.pushBack(tramo);
+                    }
+    
+    
+                    // console.log({
+                    //     origen,
+                    //     destino
+                    // });
+                    transbordos.push(destino);
+                } else {
+                    /***
+                     * Otro transbordo :v
+                     */
+                    let nuevoOrigen = this.transbordos.findUnique(t => t.id_matriz
+                        == this.destinoRecorrido(origen.id_matriz, destino.id_matriz));
+                    
+                    let tramo: Tramo = {
                         linea: origen.id_linea,
-                        estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion),
-                        direccion: this.getDirection(origen.id_linea, origen.id_estacion < destino.id_estacion)
+                        estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, nuevoOrigen.id_estacion),
+                        direccion : this.getDirection(origen.id_linea, origen.id_estacion < nuevoOrigen.id_estacion) 
                     };
                     rutaFinal.lineas.pushBack(tramo);
+                    
+                    origen = nuevoOrigen;
                 }
-
-
-                // console.log({
-                //     origen,
-                //     destino
-                // });
-                transbordos.push(destino);
-            } else {
-                /***
-                 * Otro transbordo :v
-                 */
-                let nuevoOrigen = this.transbordos.findUnique(t => t.id_matriz
-                    == this.destinoRecorrido(origen.id_matriz, destino.id_matriz));
-                
-                let tramo: Tramo = {
-                    linea: origen.id_linea,
-                    estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, nuevoOrigen.id_estacion),
-                    direccion : this.getDirection(origen.id_linea, origen.id_estacion < nuevoOrigen.id_estacion) 
-                };
-                rutaFinal.lineas.pushBack(tramo);
-                
-                origen = nuevoOrigen;
             }
+            rutaFinal.lineas.pushFront(caminoIr);
+            rutaFinal.lineas.pushBack(caminoLlegar);
         }
+
+        
         // console.table(transbordos);
         console.error('Peso aquí => ' + costo);
-
-        rutaFinal.lineas.pushFront(caminoIr);
-        rutaFinal.lineas.pushBack(caminoLlegar);
         rutaFinal.peso = costo;
+
         return rutaFinal;
     }
 

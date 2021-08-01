@@ -116,10 +116,10 @@ export class RouteCalculatorService {
         if (origen.tipo == 0) {
             this.posiblesOrigenes = this.estaciones.map(e => e.estacion == origen.nombre);
         } else {
-            let estaciones = [];
+            let estaciones = new Lista<number>();
             this.puntos.forEach(p => {
                 if (p.punto_de_interes == origen.nombre) {
-                    estaciones.push(p.id_kiosco);
+                    estaciones.pushBack(p.id_kiosco);
                 }
             });
             this.posiblesOrigenes = this.estaciones.map(e => estaciones.includes(e.id_kiosco));
@@ -134,7 +134,7 @@ export class RouteCalculatorService {
                     estaciones.pushBack(p.id_kiosco);
                 }
             });
-            this.posiblesOrigenes = this.estaciones.map(e => estaciones.includes(e.id_kiosco));
+            this.posiblesDestinos = this.estaciones.map(e => estaciones.includes(e.id_kiosco));
         }
 
         console.log(this.posiblesOrigenes.toArray());

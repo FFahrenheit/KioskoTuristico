@@ -137,7 +137,7 @@
                                     Pasará por las estaciones:
 
                                     <ul>
-                                        <li *ngFor="let p of getPoints(s).slice(1,-1); let j = index;">
+                                        <li *ngFor="let p of getPoints(s).slice(1); let j = index;">
                                             {{ p.estacion }}
                                             <span *ngIf="p.puntos.size() != 0">
                                                 <br>
