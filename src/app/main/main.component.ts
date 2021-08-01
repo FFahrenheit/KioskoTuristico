@@ -44,6 +44,7 @@ export class MainComponent implements OnInit {
       destino: [null, Validators.required]
     });
     this.loadStops();
+    this.route.init();
   }
 
   public loadStops() : void{

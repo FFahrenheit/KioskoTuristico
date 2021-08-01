@@ -1,5 +1,4 @@
 import { Routes } from "@angular/router";
-import { EditStationsComponent } from "./admin/edit-stations/edit-stations.component";
 import { InicioComponent } from "./inicio/inicio.component";
 import { AdminComponent } from "./layouts/admin/admin.component";
 import { BlankComponent } from "./layouts/blank/blank.component";

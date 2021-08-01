@@ -184,7 +184,7 @@ export class Ruta {
         let min = direccion ? inicio : fin;
         let max = direccion ? fin : inicio;
         let estaciones: Lista<Estacion> = this.estaciones.map(e => e.id_linea == linea
-            && e.id_estacion >= min && e.id_estacion <= max);
+            && e.id_estacion >= min && e.id_estacion <= max && e.estatus == 0);
 
         sort(estaciones, e => e.id_estacion);
 

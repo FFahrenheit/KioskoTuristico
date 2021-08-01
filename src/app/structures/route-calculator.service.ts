@@ -34,6 +34,10 @@ export class RouteCalculatorService {
     constructor(private estacionesService: StationsService,
         private puntosService: PlacesService,
         private rutasService: RoutesService) {
+            this.init();
+    }
+    
+    public init() : void{
         let calls = [];
 
         calls.push(this.estacionesService.loadEstaciones()
@@ -71,6 +75,7 @@ export class RouteCalculatorService {
     }
 
     private makeStationList(estaciones: any[]) {
+        this.estaciones.clear();
         estaciones.forEach(e => {
             const estacion: Estacion = {
                 id_estacion: e['id_estacion'],
