@@ -183,12 +183,19 @@ export class RouteCalculatorService {
             }
         });
 
+        console.log(lista.toArray());
+
         ids.forEach(i => {
             let rowM = new Lista<number>();
             let rowT = new Lista<number>();
             ids.forEach(j => {
                 let min = 99;
-                if (i == j) {
+
+                if(lista.findUnique(l => l.id_matriz == i).estatus == 1 || 
+                lista.findUnique(l => l.id_matriz == j).estatus == 1){
+                    min = 99;
+                }
+                else if (i == j) {
                     min = 0;
                 } else {
                     lista.map(a => a.id_matriz == i).forEach(o => {
@@ -213,6 +220,9 @@ export class RouteCalculatorService {
 
         this.matrizM = matrizM;
         this.matrizT = matrizT;
+
+        this.printM();
+        this.printT();
 
         console.warn('Floyd algorithm');
 
