@@ -9,8 +9,6 @@ export class Ruta {
 
     public origen: Estacion;
     public destino: Estacion;
-    public origenFijo: Estacion;
-    public destinoFijo: Estacion;
 
     private costoTransbordo = 3;
     private costoEspera = 2;
@@ -24,15 +22,15 @@ export class Ruta {
                 private T           : Lista<Lista<number>>) { }
 
     public setRuta(origen: Estacion, destino: Estacion) : RutaFinal {
-        this.origen = this.origenFijo = origen;
-        this.destino = this.destinoFijo = destino;
+        this.origen = origen;
+        this.destino = destino;
         return this.calculateRoute();
     }
 
     private calculateRoute(): RutaFinal {
-        console.clear();
 
         let minPeso = 999;
+        let minTransbordos = 10;
 
         let posiblesTransbordosOrigen = this.transbordos.map(t => t.id_linea == this.origen.id_linea);
         let posiblesTransbordosDestino = this.transbordos.map(t => t.id_linea == this.destino.id_linea);
@@ -42,9 +40,10 @@ export class Ruta {
         posiblesTransbordosOrigen.forEach(o => {
             posiblesTransbordosDestino.forEach(d => {
                 let ruta = this.calcularCosto(o, d);
-                if (minPeso > ruta.peso) {
-                    minPeso = ruta.peso;
+                if (minPeso >= ruta.peso && minTransbordos > ruta.lineas.size()) {
                     minRuta = ruta;
+                    minPeso = ruta.peso;
+                    minTransbordos = ruta.lineas.size();
                 }
             });
         });
@@ -92,6 +91,11 @@ export class Ruta {
 
         if (origen.id_linea == destino.id_linea) {
             costo += this.tramo(origen, destino);
+            /***
+             * REVISAR......
+             */
+            costo = this.tramo(this.origen, this.destino) + this.costoEspera;
+            // costo = this.tramo(origen, destino) + this.costoEspera;
             let tramo: Tramo = {
                 estacion : this.getEstaciones(origen.id_linea, this.origen.id_estacion, this.destino.id_estacion),
                 linea : origen.id_linea,
@@ -129,12 +133,31 @@ export class Ruta {
                     });
     
                     if(origen.id_matriz != destino.id_matriz){
-                        let tramo : Tramo = {
-                            linea: origen.id_linea,
-                            estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion),
-                            direccion: this.getDirection(origen.id_linea, origen.id_estacion < destino.id_estacion)
-                        };
-                        rutaFinal.lineas.pushBack(tramo);
+
+                        
+                        if(rutaFinal.lineas.size()>0 && rutaFinal.lineas.back().linea == destino.id_linea){
+                            console.warn('1');
+                            console.warn('1');
+                            console.warn('1');
+
+                            let or = rutaFinal.lineas.back().estacion.back();
+                            let tramo : Tramo = {
+                                linea: origen.id_linea,
+                                estacion : this.getEstaciones(origen.id_linea, or.id , destino.id_estacion),
+                                direccion: this.getDirection(origen.id_linea, or.id < destino.id_estacion)
+                            };
+                            rutaFinal.lineas.popBack();
+                            rutaFinal.lineas.pushBack(tramo);
+                        }else{
+                            let tramo : Tramo = {
+                                linea: origen.id_linea,
+                                estacion : this.getEstaciones(origen.id_linea, origen.id_estacion, destino.id_estacion),
+                                direccion: this.getDirection(origen.id_linea, origen.id_estacion < destino.id_estacion)
+                            };
+                            rutaFinal.lineas.pushBack(tramo);                            
+                        }
+
+                        // costo -=  this.pesoRecorrido(origen.id_matriz, destino.id_matriz);
                     }
     
     
