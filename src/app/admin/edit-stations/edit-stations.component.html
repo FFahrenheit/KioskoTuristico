@@ -76,7 +76,7 @@
                     {{ tipo[e.tipo] }}
                 </td>
                 <td>
-                    {{ e.id_matriz || 'N/A' }}
+                    {{ e.id_matriz == null ? 'N/A' :  e.id_matriz }}
                 </td>
                 <td>
                     {{ estado[e.estatus] }}

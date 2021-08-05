@@ -10,7 +10,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron": "electron .",
-    "electron-build": "ng build --prod"
+    "electron-build": "ng build --prod",
+    "exe": "electron-packager . --platform=win32 --overwrite"
   },
   "private": true,
   "dependencies": {
