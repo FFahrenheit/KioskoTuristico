@@ -62,13 +62,16 @@
 
             <div  class="card m-3 special-card" *ngIf="submitted && !loading && !error"> 
                 <div class="card-body resume">
+
                     <h4 class="text-center">Resumen de trayecto</h4>
+                    
                     <i class="fas fa-clock"></i>
                     <span class="bold-minus">
                         Tiempo estimado: 
                     </span>
                     {{ finalRoute.peso }} minutos
                     <br>
+                    
                     <i class="fas fa-bus"></i>
                     <span class="bold-minus">
                         Número de transbordos: 
@@ -76,11 +79,19 @@
                     {{ finalRoute.lineas.size() - 1 }}
                     {{ finalRoute.lineas.size() == 2 ? ' transbordo' : ' transbordos' }}
                     <br>
+                    
                     <i class="fas fa-coins"></i>
                     <span class="bold-minus">
                         Costo total: 
                     </span>
                     ${{ 9.5 * 1 + (finalRoute.lineas.size() - 1)*4.75 }}
+                    <br>
+                    
+                    <i class="fas fa-project-diagram"></i>
+                    <span class="bold-minus">
+                        Nodos visitados: 
+                    </span>
+                    {{ finalRoute.costo }} nodos
                 </div>
             </div>
         </div>

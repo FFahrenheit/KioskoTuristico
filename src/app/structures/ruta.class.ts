@@ -1,3 +1,4 @@
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { Linea } from "../models/line.interface";
 import { PuntoInteres } from "../models/place.interface";
 import { Point, RutaFinal, Tramo } from "../models/route.interface";
@@ -75,8 +76,10 @@ export class Ruta {
 
         let costoMatriz = this.pesoRecorrido(o.id_matriz, d.id_matriz);
         if (costoMatriz == 0) {
-            costoIr = this.tramo(this.origen, this.destino);
-            costoLlegar = 0;
+            if(this.origen.id_linea == this.destino.id_linea){
+                costoIr = this.tramo(this.origen, this.destino);
+                costoLlegar = 0;
+            }
         }
 
         let pesoTotal = costoIr + costoLlegar + costoMatriz;
@@ -159,6 +162,7 @@ export class Ruta {
             de: this.o.id_matriz + ' ->' + this.o.estacion,
             hacia: this.d.id_matriz + ' -> ' + this.d.estacion
         });
+
         this.rutaFinal = {
             costo: 0,
             peso: this.min,
@@ -277,6 +281,10 @@ export class Ruta {
             );
         }
         console.log(this.rutaFinal.lineas.toArray());
+
+        this.rutaFinal.costo = this.rutaFinal.peso;
+        this.rutaFinal.peso = this.rutaFinal.peso + this.costoEspera
+         + (this.rutaFinal.lineas.size() - 1) * this.costoTransbordo;
         return this.rutaFinal;
     }
 
