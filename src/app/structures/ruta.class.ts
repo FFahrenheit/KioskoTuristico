@@ -36,6 +36,11 @@ export class Ruta {
         return this.calculateRoute();
     }
 
+    public set(origen : Estacion, destino : Estacion) : void{
+        this.origen = origen;
+        this.destino = destino;
+    }
+
     private calculateRoute(): RutaFinal | number {
 
         let minPeso = 999;
@@ -253,7 +258,10 @@ export class Ruta {
 
         });
 
-        if (this.rutaFinal.lineas.back().linea == this.destino.id_linea) {
+        if(this.destino.id_matriz == this.matrices.back()){
+            console.log('El final es una estación de cruce...');
+        }
+        else if (this.rutaFinal.lineas.back().linea == this.destino.id_linea) {
             // Si hay que completar el mismo tramo ... 
             console.log({
                 linea: this.rutaFinal.lineas.back().linea,

@@ -33,6 +33,8 @@ export class RouteCalculatorService {
 
     private o : Estacion;
     private d : Estacion;
+    private oFinal : Estacion;
+    private dFinal : Estacion;
     private min : number;
 
     constructor(private estacionesService: StationsService,
@@ -159,6 +161,8 @@ export class RouteCalculatorService {
                 let ruta = this.ruta.setRuta(o,d);
                 if(typeof ruta == 'number'){
                     if(ruta < minPeso){
+                        this.oFinal = o;
+                        this.dFinal = d;
                         minPeso = ruta;
                         this.o = this.ruta.o;
                         this.d = this.ruta.d;
@@ -179,7 +183,8 @@ export class RouteCalculatorService {
     public getRoute(){
         this.ruta.o = this.o;
         this.ruta.d = this.d;
-        this.ruta.min = this.min
+        this.ruta.min = this.min;
+        this.ruta.set(this.oFinal, this.dFinal);
         return this.ruta.getRecorrido();
     }
 
