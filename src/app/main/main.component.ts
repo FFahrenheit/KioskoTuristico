@@ -25,9 +25,13 @@ const pruebas = [
     origen: 'La Estancia',
     destino: 'Haciendas'
   },
+  {
+    origen: 'Abastos',
+    destino: 'Alameda'
+  },
 ];
 
-const prueba = 1;
+const prueba = 4;
 
 @Component({
   selector: 'app-main',
