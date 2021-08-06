@@ -161,6 +161,8 @@ export class RouteCalculatorService {
                 let ruta = this.ruta.setRuta(o,d);
                 if(typeof ruta == 'number'){
                     if(ruta < minPeso){
+                        this.oFinal = o;
+                        this.dFinal = d;
                         minPeso = ruta;
                         this.o = this.ruta.o;
                         this.d = this.ruta.d;
