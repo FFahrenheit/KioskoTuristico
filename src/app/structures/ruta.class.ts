@@ -36,16 +36,12 @@ export class Ruta {
         return this.calculateRoute();
     }
 
-    public set(origen : Estacion, destino : Estacion) : void{
-        this.origen = origen;
-        this.destino = destino;
-    }
-
     private calculateRoute(): RutaFinal | number {
 
         let minPeso = 999;
         let minIr = 100;
         let minLlegar = 100;
+        let minMatriz = 100;
 
         let posiblesTransbordosOrigen = this.transbordos.map(t => t.id_linea == this.origen.id_linea);
         let posiblesTransbordosDestino = this.transbordos.map(t => t.id_linea == this.destino.id_linea);
@@ -54,13 +50,15 @@ export class Ruta {
             posiblesTransbordosDestino.forEach(d => {
                 let peso = this.ruta(o, d);
                 if (peso[0] <= minPeso) {
-                    if ((peso[1] <= minIr && peso[2] <= minLlegar) || minLlegar == 0) {
+                    let condicion = (peso[1] <= minIr && peso[2] <= minLlegar) || minLlegar == 0;
+                    if (condicion) {
                         minPeso = peso[0];
                         this.o = o;
                         this.min = minPeso;
                         this.d = d;
                         minIr = peso[1];
                         minLlegar = peso[2];
+                        minMatriz = peso[3];
                     }
                 }
             });
@@ -181,6 +179,26 @@ export class Ruta {
             this.matrices.pushBack(this.d.id_matriz);
         }
         console.warn(this.matrices.toArray());
+        let flag = false;
+        while(!flag){
+            flag = true;
+            this.matrices.iterate((m, i)=>{
+                if(i != this.matrices.size()-1){
+                    let u = m;
+                    let v = this.matrices.get(i+1);
+                    if(this.destinoRecorrido(u,v) != 99){
+                        console.log('Falto recorrido');
+                        let next = this.destinoRecorrido(u,v);
+                        this.matrices.insert(i+1,next);
+                        flag = false;
+                    }
+                }
+            });
+            if(flag){
+                console.error('ACABO!');
+            }
+            console.log(this.matrices.toArray());
+        }
 
         let origen = this.origen;
         let destino = this.origen;
@@ -258,11 +276,14 @@ export class Ruta {
 
         });
 
-        if(this.destino.id_matriz == this.matrices.back()){
-            console.log('El final es una estación de cruce...');
+        if (this.rutaFinal.lineas.front().estacion.size() == 1){
+            this.rutaFinal.lineas.popFront();
         }
-        else if (this.rutaFinal.lineas.back().linea == this.destino.id_linea) {
+
+
+        if (this.rutaFinal.lineas.back().linea == this.destino.id_linea) {
             // Si hay que completar el mismo tramo ... 
+
             console.log({
                 linea: this.rutaFinal.lineas.back().linea,
                 origen: this.estaciones.findUnique(e => e.id_kiosco == this.rutaFinal.lineas.back().estacion.front().id),
@@ -281,12 +302,24 @@ export class Ruta {
             this.rutaFinal.lineas.pushBack(nuevoTramo);
         } else {
             // Si hay que hacer el ultimo tramo
-            this.rutaFinal.lineas.pushBack(
-                this.makeTramo(
-                    this.estaciones.findUnique(e => e.id_matriz == this.matrices.back() && e.id_linea == this.destino.id_linea),
-                    this.destino
-                )
-            );
+            console.warn({
+                destino: this.destino,
+                back: this.matrices.back()
+            })
+            if(this.estaciones.findUnique(
+                e => e.id_matriz == this.matrices.back() 
+                && e.id_linea == this.destino.id_linea) != null){
+                    this.rutaFinal.lineas.pushBack(
+                        this.makeTramo(
+                            this.estaciones.findUnique(e => e.id_matriz == this.matrices.back() && e.id_linea == this.destino.id_linea),
+                            this.destino
+                        )
+                    );
+                }
+
+        }
+        if(this.rutaFinal.lineas.back().estacion.size()==1){
+            this.rutaFinal.lineas.popBack();
         }
         console.log(this.rutaFinal.lineas.toArray());
 
@@ -319,4 +352,8 @@ export class Ruta {
         return tramo;
     }
 
+    public set(o : Estacion, d: Estacion){
+        this.origen = o;
+        this.destino = d;
+    }
 }
