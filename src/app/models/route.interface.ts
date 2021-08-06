@@ -1,6 +1,7 @@
 import { Lista } from "../structures/lista.structure";
 
 export interface RutaFinal{
+    costo : number,
     peso : number,
     lineas : Lista<Tramo>
 }

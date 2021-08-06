@@ -8,8 +8,26 @@ import { Lista } from '../structures/lista.structure';
 import { sort } from '../structures/quicksort.algorithm';
 import { RouteCalculatorService } from '../structures/route-calculator.service';
 
-const prueba_origen = null;
-const prueba_destino = null;
+const pruebas = [
+  {
+    origen: 'Expo',
+    destino: 'Centro Cultural'
+  },
+  {
+    origen: 'Alamo',
+    destino: 'CUCEA'
+  },
+  {
+    origen: 'Escultura',
+    destino: 'CUCEA'
+  },
+  {
+    origen: 'La Estancia',
+    destino: 'Haciendas'
+  },
+];
+
+const prueba = 1;
 
 @Component({
   selector: 'app-main',
@@ -54,8 +72,8 @@ export class MainComponent implements OnInit {
             this.makeList(this.stopsService.getStops());
             // this.get('origen').setValue(null);
             // this.get('destino').setValue(null);
-            this.origin = this.paradas.findUnique( p => p.nombre == prueba_origen && p.tipo == 0);
-            this.destination = this.paradas.findUnique( p => p.nombre == prueba_destino && p.tipo == 0);
+            this.origin = this.paradas.findUnique( p => p.nombre == pruebas[prueba].origen && p.tipo == 0);
+            this.destination = this.paradas.findUnique( p => p.nombre == pruebas[prueba].destino && p.tipo == 0);
           }else{
             this.toastr.error(this.stopsService.getError(),'Error');
           }

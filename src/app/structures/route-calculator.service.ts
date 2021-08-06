@@ -31,6 +31,10 @@ export class RouteCalculatorService {
     private matrizM: Lista<Lista<number>>;
     private matrizT: Lista<Lista<number>>;
 
+    private o : Estacion;
+    private d : Estacion;
+    private min : number;
+
     constructor(private estacionesService: StationsService,
         private puntosService: PlacesService,
         private rutasService: RoutesService) {
@@ -153,9 +157,18 @@ export class RouteCalculatorService {
         this.posiblesOrigenes.forEach(o =>{
             this.posiblesDestinos.forEach(d =>{
                 let ruta = this.ruta.setRuta(o,d);
-                if(ruta.peso < minPeso){
-                    this.rutaFinal = ruta;
-                    minPeso = ruta.peso;
+                if(typeof ruta == 'number'){
+                    if(ruta < minPeso){
+                        minPeso = ruta;
+                        this.o = this.ruta.o;
+                        this.d = this.ruta.d;
+                        this.min = this.ruta.min;
+                    }
+                }else{
+                    if(ruta.costo < minPeso){
+                        this.rutaFinal = ruta;
+                        minPeso = ruta.costo;
+                    }
                 }
             });
         });
@@ -163,8 +176,11 @@ export class RouteCalculatorService {
         console.log(this.rutaFinal);
     }
 
-    public getRoute() : RutaFinal {
-        return this.rutaFinal;
+    public getRoute(){
+        this.ruta.o = this.o;
+        this.ruta.d = this.d;
+        this.ruta.min = this.min
+        return this.ruta.getRecorrido();
     }
 
     public calculateMatrix() {
@@ -201,11 +217,13 @@ export class RouteCalculatorService {
                     lista.map(a => a.id_matriz == i).forEach(o => {
                         lista.map(e => e.id_matriz == j).forEach(d => {
                             if (o.id_linea == d.id_linea) {
-                                let minId = o.id_estacion > d.id_estacion ? d.id_estacion : o.id_estacion;
-                                let maxId = minId == o.id_estacion ? d.id_estacion : o.id_estacion;
+                                let minId = Math.min(o.id_estacion, d.id_estacion);
+                                let maxId = Math.max(o.id_estacion, d.id_estacion);
                                 if (lista.map((l) => l.id_linea == o.id_linea
                                     && l.id_estacion > minId && l.id_estacion < maxId).size() == 0) {
-                                    min = maxId - minId;
+                                    min = this.estaciones.map(l => l.id_linea == o.id_linea 
+                                        && l.id_estacion > minId && l.id_estacion <= maxId
+                                        && l.estatus == 0).size();
                                 }
                             }
                         });
